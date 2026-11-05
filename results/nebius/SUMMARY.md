@@ -18,6 +18,9 @@ What gets re-read: tool 57% · assistant 23% · system 11% · task 9%
 | CEILING: perfect foresight (not buildable) | no | 56.8% | 71.2% | 71.2% | 0.0% |
 | Learned keep/hide, 1% miss target (new) | no | 39.9% | 50.0% | 49.6% | 1.0% |
 | Learned keep/hide, 3% miss target (new) | no | 41.3% | 51.8% | 51.4% | 1.0% |
+| Tree + echo (new) | no | 53.6% | 67.2% | 65.9% | 3.1% |
+| Tree + echo, only last step in full (new) | no | 56.8% | 71.2% | 67.5% | 6.5% |
+| Tree + echo + cap long fresh outputs (new) | no | 53.9% | 67.5% | 66.2% | 3.1% |
 
 **Fixed instructions** (system prompt + task) are identical on every step; providers cache them, so the conversation column is the part a method can really change. **Net** = conversation saving after charging, for every miss, the cost of fetching the stored message back (15 tokens + its size), so nothing is lost. **Miss rate** = share of the agent's references to earlier information (names, paths, numbers, error types it wrote) that were hidden from it at that moment. 0% = it never needed something the method hid. Lossless methods can still show misses, because a pointer replaces an old copy; the agent would fetch it on request.
 
@@ -35,3 +38,6 @@ What gets re-read: tool 57% · assistant 23% · system 11% · task 9%
 - **CEILING: perfect foresight (not buildable)**: Upper bound, for reference only. Instructions and task kept; from every other earlier message keep only the lines whose names/paths/numbers the agent will actually use later. Shows the most any method could save.
 - **Learned keep/hide, 1% miss target (new)**: Version collapse, then each line of a tool output, once it is 3 steps old, is scored by a model trained on other runs: 'will the agent need this later?'. Lines below a threshold set for a 1% miss target are stored, not shown. Error/pass lines are always kept.
 - **Learned keep/hide, 3% miss target (new)**: Version collapse, then each line of a tool output, once it is 3 steps old, is scored by a model trained on other runs: 'will the agent need this later?'. Lines below a threshold set for a 3% miss target are stored, not shown. Error/pass lines are always kept.
+- **Tree + echo (new)**: Tree memory, but each folded old output keeps its first line plus up to 8 lines mentioning things the agent or task already named, instead of one line only. Aims at tree-level savings with fewer misses.
+- **Tree + echo, only last step in full (new)**: Same as Tree + echo, but only the most recent step stays in full (more aggressive).
+- **Tree + echo + cap long fresh outputs (new)**: Tree + echo, and even recent outputs longer than 120 lines show only the first 60 and last 40 lines (the rest stored). Targets huge logs and file dumps that dominate OpenHands runs.
