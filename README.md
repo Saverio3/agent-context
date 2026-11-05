@@ -12,3 +12,8 @@ Run locally: `python -m lab.run --local data/local --out results/local`
 
 Scores: **tokens saved** vs re-reading everything; **miss rate** = share of the agent's references to earlier
 facts (names, paths, numbers, error types) that the method had hidden at that moment. Tokens ≈ characters / 4.
+
+## Need-to-know lab (agents talking to each other)
+
+`lab/n2k/` replays 55 public ChatDev multi-agent runs (`data/chatdev/`, from OpenBMB/ChatDev branch chatdev1.0)
+under 7 ways of sending messages. Run: `python -m lab.n2k.run data/chatdev` → `results/need_to_know/SUMMARY.md`.
