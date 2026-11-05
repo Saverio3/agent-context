@@ -14,8 +14,16 @@ from multiprocessing import Pool
 
 from . import core, methods
 
-METHODS = [importlib.import_module(f"lab.methods.{m.name}")
-           for m in pkgutil.iter_modules(methods.__path__) if m.name.startswith("m")]
+ALWAYS = ("m00_", "m01_", "m18_")
+
+
+def pick(prefixes):
+    names = [m.name for m in pkgutil.iter_modules(methods.__path__)
+             if m.name[:1] in prefixes or m.name.startswith(ALWAYS)]
+    return [importlib.import_module(f"lab.methods.{n}") for n in sorted(names, key=lambda n: (n[:4] not in ALWAYS, n))]
+
+
+METHODS = pick("m")
 
 
 def score_run(item):
@@ -33,8 +41,11 @@ def main():
     ap.add_argument("--limit", type=int)
     ap.add_argument("--out", default="results")
     ap.add_argument("--label", default="")
+    ap.add_argument("--group", default="m", help="method file prefixes to run, e.g. 'bc'")
     ap.add_argument("--test-half", action="store_true", help="score only runs the predictor did not train on")
     a = ap.parse_args()
+    global METHODS
+    METHODS = pick(a.group)
     runs = core.load_local(a.local) if a.local else core.load_jsonl(a.jsonl, a.limit)
     if a.test_half:
         from .predict import is_train
