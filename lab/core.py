@@ -89,7 +89,7 @@ def replay(ms, policy):
     the run. It is a 'miss' if, under the policy, it no longer appears anywhere the model can see
     at that moment: the model used information the policy had hidden from it.
     """
-    total = refs = misses = dyn = 0
+    total = refs = misses = dyn = fetch = 0
     for t, (role, text) in enumerate(ms):
         if role != "assistant":
             continue
@@ -106,5 +106,10 @@ def replay(ms, policy):
                 vis_sal |= salient(c)
         used = salient(text) & full_sal
         refs += len(used)
-        misses += len(used - vis_sal)
-    return total, misses, refs, dyn
+        lost = used - vis_sal
+        misses += len(lost)
+        if lost:  # fetch-back: the agent asks for the stored messages that hold what it needs
+            for (_, c), v in zip(ctx, visible):
+                if v is not c and salient(c) & lost:
+                    fetch += 15 + toks(c)
+    return total, misses, refs, dyn, fetch

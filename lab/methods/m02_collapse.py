@@ -4,11 +4,15 @@ NAME = "Version collapse"
 LOSSLESS = True
 DESCRIPTION = ("An older view of a file the agent later re-opened, or an exact repeat of an earlier output, "
                "becomes a pointer. Only superseded copies are hidden; the latest copy is always visible.")
-FILE_RE = re.compile(r"\[File: ([^\s\]]+) \(\d+ lines total\)\]|^(?:File|Contents of|cat) ([\w./-]+\.\w+)", re.M)
+FILE_RE = re.compile(
+    r"\[File: ([^\s\]]+) \(\d+ lines total\)\]"                       # SWE-agent viewer
+    r"|running `cat -n` on (?:a snippet of )?([^\s:`]+)"                # OpenHands editor view / edit
+    r"|^(?:File|Contents of|cat) ([\w./-]+\.\w+)"                      # generic
+    r"|(?:file|File) (/[\w./-]+\.\w+) (?:has been edited|was created|created successfully)", re.M)
 
 def _key(c):
     m = FILE_RE.search(c)
-    return (m.group(1) or m.group(2)) if m else None
+    return next((g for g in m.groups() if g), None) if m else None
 
 def stale_flags(ctx):
     latest_file, latest_text = {}, {}

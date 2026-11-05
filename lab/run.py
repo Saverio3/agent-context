@@ -33,8 +33,12 @@ def main():
     ap.add_argument("--limit", type=int)
     ap.add_argument("--out", default="results")
     ap.add_argument("--label", default="")
+    ap.add_argument("--test-half", action="store_true", help="score only runs the predictor did not train on")
     a = ap.parse_args()
     runs = core.load_local(a.local) if a.local else core.load_jsonl(a.jsonl, a.limit)
+    if a.test_half:
+        from .predict import is_train
+        runs = [r for r in runs if not is_train(r[0])]
     with Pool() as p:
         rows = p.map(score_run, runs, chunksize=8)
     os.makedirs(a.out, exist_ok=True)
@@ -54,7 +58,7 @@ def main():
              f"Runs: {len(rows)} · model calls: {sum(r['calls'] for r in rows)} · "
              f"median calls per run: {statistics.median(r['calls'] for r in rows):.0f} · "
              f"baseline tokens re-read: {B:,}", "", f"What gets re-read: {mix}", "",
-             "| Method | Lossless | Tokens saved (all) | Saved on the conversation (excl. fixed instructions) | Median per run | Miss rate |",
+             "| Method | Lossless | Tokens saved (all) | Saved on the conversation (excl. fixed instructions) | Net, after fetching back what was missed | Miss rate |",
              "|---|---|---|---|---|---|"]
     csv_rows = []
     for m in METHODS:
@@ -66,10 +70,11 @@ def main():
         big = sum(x >= 0.30 for x in per) / len(per)
         D = sum(r[base_key][3] for r in rows) or 1
         dsave = 1 - sum(r[k][3] for r in rows) / D
+        net = 1 - (sum(r[k][3] for r in rows) + sum(r[k][4] for r in rows)) / D
         lines.append(f"| {m.NAME} | {'yes' if m.LOSSLESS else 'no'} | {1 - tot / B:.1%} | {dsave:.1%} | "
-                     f"{statistics.median(per):.1%} | {miss / refs:.1%} |")
-        csv_rows.append([m.NAME, m.LOSSLESS, 1 - tot / B, dsave, statistics.median(per), miss / refs])
-    lines += ["", "**Fixed instructions** (system prompt + task) are identical on every step; providers cache them, so the conversation column is the part a method can really change. **Miss rate** = share of the agent's references to earlier information (names, paths, "
+                     f"{net:.1%} | {miss / refs:.1%} |")
+        csv_rows.append([m.NAME, m.LOSSLESS, 1 - tot / B, dsave, net, miss / refs])
+    lines += ["", "**Fixed instructions** (system prompt + task) are identical on every step; providers cache them, so the conversation column is the part a method can really change. **Net** = conversation saving after charging, for every miss, the cost of fetching the stored message back (15 tokens + its size), so nothing is lost. **Miss rate** = share of the agent's references to earlier information (names, paths, "
               "numbers, error types it wrote) that were hidden from it at that moment. 0% = it never "
               "needed something the method hid. Lossless methods can still show misses, because a pointer "
               "replaces an old copy; the agent would fetch it on request.", "",
@@ -78,7 +83,7 @@ def main():
     open(os.path.join(a.out, "SUMMARY.md"), "w").write("\n".join(lines) + "\n")
     with open(os.path.join(a.out, "summary.csv"), "w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["method", "lossless", "saved", "saved_conversation", "median_saved", "miss_rate"])
+        w.writerow(["method", "lossless", "saved", "saved_conversation", "net_after_fetch", "miss_rate"])
         w.writerows(csv_rows)
     print("\n".join(lines[:6 + len(METHODS) + 2]))
 

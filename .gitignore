@@ -1,2 +1,3 @@
 __pycache__/
 data/*.jsonl
+lab/model.json
