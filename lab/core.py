@@ -89,13 +89,14 @@ def replay(ms, policy):
     the run. It is a 'miss' if, under the policy, it no longer appears anywhere the model can see
     at that moment: the model used information the policy had hidden from it.
     """
-    total = refs = misses = 0
+    total = refs = misses = dyn = 0
     for t, (role, text) in enumerate(ms):
         if role != "assistant":
             continue
         ctx = ms[:t]
-        visible = policy(ctx)
+        visible = policy(ctx, ms[t:]) if getattr(policy, "needs_future", False) else policy(ctx)
         total += sum(toks(v) for v in visible)
+        dyn += sum(toks(v) for v, (r, _) in zip(visible, ctx) if r not in ("system", "task"))
         full_sal, vis_sal = set(), set()
         for (_, c), v in zip(ctx, visible):
             full_sal |= salient(c)
@@ -106,4 +107,4 @@ def replay(ms, policy):
         used = salient(text) & full_sal
         refs += len(used)
         misses += len(used - vis_sal)
-    return total, misses, refs
+    return total, misses, refs, dyn

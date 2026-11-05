@@ -41,11 +41,20 @@ def main():
 
     base_key = "lab.methods.m00_baseline"
     B = sum(r[base_key][0] for r in rows)
+    from collections import Counter
+    share = Counter()
+    for _, ms in runs:
+        for t, (role, _) in enumerate(ms):
+            if role == "assistant":
+                for r, c in ms[:t]:
+                    share[r] += core.toks(c)
+    S = sum(share.values()) or 1
+    mix = " · ".join(f"{k} {v / S:.0%}" for k, v in share.most_common())
     lines = [f"# Agent context lab — {a.label or (a.local or a.jsonl)}", "",
              f"Runs: {len(rows)} · model calls: {sum(r['calls'] for r in rows)} · "
              f"median calls per run: {statistics.median(r['calls'] for r in rows):.0f} · "
-             f"baseline tokens re-read: {B:,}", "",
-             "| Method | Lossless | Tokens saved (all runs) | Median saving per run | Runs saving ≥30% | Miss rate |",
+             f"baseline tokens re-read: {B:,}", "", f"What gets re-read: {mix}", "",
+             "| Method | Lossless | Tokens saved (all) | Saved on the conversation (excl. fixed instructions) | Median per run | Miss rate |",
              "|---|---|---|---|---|---|"]
     csv_rows = []
     for m in METHODS:
@@ -55,10 +64,12 @@ def main():
         refs = sum(r[k][2] for r in rows) or 1
         per = [1 - r[k][0] / r[base_key][0] for r in rows]
         big = sum(x >= 0.30 for x in per) / len(per)
-        lines.append(f"| {m.NAME} | {'yes' if m.LOSSLESS else 'no'} | {1 - tot / B:.1%} | "
-                     f"{statistics.median(per):.1%} | {big:.0%} | {miss / refs:.1%} |")
-        csv_rows.append([m.NAME, m.LOSSLESS, 1 - tot / B, statistics.median(per), big, miss / refs])
-    lines += ["", "**Miss rate** = share of the agent's references to earlier information (names, paths, "
+        D = sum(r[base_key][3] for r in rows) or 1
+        dsave = 1 - sum(r[k][3] for r in rows) / D
+        lines.append(f"| {m.NAME} | {'yes' if m.LOSSLESS else 'no'} | {1 - tot / B:.1%} | {dsave:.1%} | "
+                     f"{statistics.median(per):.1%} | {miss / refs:.1%} |")
+        csv_rows.append([m.NAME, m.LOSSLESS, 1 - tot / B, dsave, statistics.median(per), miss / refs])
+    lines += ["", "**Fixed instructions** (system prompt + task) are identical on every step; providers cache them, so the conversation column is the part a method can really change. **Miss rate** = share of the agent's references to earlier information (names, paths, "
               "numbers, error types it wrote) that were hidden from it at that moment. 0% = it never "
               "needed something the method hid. Lossless methods can still show misses, because a pointer "
               "replaces an old copy; the agent would fetch it on request.", "",
@@ -67,7 +78,7 @@ def main():
     open(os.path.join(a.out, "SUMMARY.md"), "w").write("\n".join(lines) + "\n")
     with open(os.path.join(a.out, "summary.csv"), "w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["method", "lossless", "saved", "median_saved", "runs_ge30", "miss_rate"])
+        w.writerow(["method", "lossless", "saved", "saved_conversation", "median_saved", "miss_rate"])
         w.writerows(csv_rows)
     print("\n".join(lines[:6 + len(METHODS) + 2]))
 
