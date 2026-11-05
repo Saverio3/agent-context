@@ -1,4 +1,4 @@
-# Agent context lab — 22 SWE-agent sample runs
+# Agent context lab — data/local
 
 Runs: 22 · model calls: 230 · median calls per run: 11 · baseline tokens re-read: 1,074,294
 
@@ -21,6 +21,7 @@ What gets re-read: tool 40% · task 25% · system 25% · assistant 10%
 | Tree + echo (new) | no | 23.0% | 46.0% | 45.6% | 1.0% |
 | Tree + echo, only last step in full (new) | no | 30.1% | 60.3% | 59.3% | 4.5% |
 | Tree + echo + cap long fresh outputs (new) | no | 24.6% | 49.2% | 46.5% | 2.1% |
+| Tree + cap + safety net (new) | no | 22.8% | 45.6% | 43.0% | 2.1% |
 
 **Fixed instructions** (system prompt + task) are identical on every step; providers cache them, so the conversation column is the part a method can really change. **Net** = conversation saving after charging, for every miss, the cost of fetching the stored message back (15 tokens + its size), so nothing is lost. **Miss rate** = share of the agent's references to earlier information (names, paths, numbers, error types it wrote) that were hidden from it at that moment. 0% = it never needed something the method hid. Lossless methods can still show misses, because a pointer replaces an old copy; the agent would fetch it on request.
 
@@ -41,3 +42,4 @@ What gets re-read: tool 40% · task 25% · system 25% · assistant 10%
 - **Tree + echo (new)**: Tree memory, but each folded old output keeps its first line plus up to 8 lines mentioning things the agent or task already named, instead of one line only. Aims at tree-level savings with fewer misses.
 - **Tree + echo, only last step in full (new)**: Same as Tree + echo, but only the most recent step stays in full (more aggressive).
 - **Tree + echo + cap long fresh outputs (new)**: Tree + echo, and even recent outputs longer than 120 lines show only the first 60 and last 40 lines (the rest stored). Targets huge logs and file dumps that dominate OpenHands runs.
+- **Tree + cap + safety net (new)**: Tree + echo + cap, plus three guards: (1) any old output whose names the agent used in its last 2 message uses at least 4 of its names is shown in full again; (2) error and traceback lines are never hidden.
