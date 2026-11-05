@@ -12,8 +12,9 @@ def main(root):
         if not rows:
             continue
         items = sorted(rows.items(), key=lambda kv: -kv[1][1])
-        front = {m for m, (_, n, mi) in items
-                 if not any(n2 > n and mi2 <= mi for _, (_, n2, mi2) in items)}
+        real = [(m, v) for m, v in items if not m.startswith("CEILING")]
+        front = {m for m, (_, n, mi) in real
+                 if not any(n2 > n and mi2 <= mi for m2, (_, n2, mi2) in real if m2 != m)}
         lines = [f"# {ds}: all methods, sorted by net saving (★ = best trade-off: nothing saves more at equal or lower risk)", "",
                  "| | Method | Saved (conversation) | Net after fetch-back | Miss rate |", "|---|---|---|---|---|"]
         lines += [f"| {'★' if m in front else ''} | {m} | {s:.1%} | {n:.1%} | {mi:.1%} |" for m, (s, n, mi) in items]
