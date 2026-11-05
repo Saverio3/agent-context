@@ -42,14 +42,15 @@ def main():
     with open(f"data/{a.name}.jsonl", "w") as out:
         for f in files:
             t = pq.read_table(hf_hub_download(repo, f, repo_type="dataset"))
-            cols = [c for c in (col, "instance_id", "model_name", "target") if c in t.column_names]
+            cols = [c for c in (col, "instance_id", "model_name", "target", "generated_patch", "patch") if c in t.column_names]
             for i, row in enumerate(t.select(cols).to_pylist()):
                 msgs = row.get(col) or []
                 if isinstance(msgs, str):
                     msgs = json.loads(msgs)
                 norm = [[m.get("role") or m.get("from") or "", _text(m)] for m in msgs if isinstance(m, dict)]
                 rid = f"{a.name}:{row.get('model_name', '')}:{row.get('instance_id', f'{f}#{i}')}"
-                out.write(json.dumps({"id": rid, "solved": row.get("target"), "messages": norm}) + "\n")
+                patch = row.get("generated_patch") or row.get("patch") or ""
+                out.write(json.dumps({"id": rid, "solved": row.get("target"), "patch": patch, "messages": norm}) + "\n")
                 n += 1
                 if n >= a.n:
                     print(f"wrote {n} runs from {repo}")

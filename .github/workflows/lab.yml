@@ -24,6 +24,7 @@ jobs:
       - run: python -m lab.predict --jsonl data/${{ matrix.dataset }}.jsonl --out lab/model.json && cp lab/model.json model.json
       - run: python -m lab.run --jsonl data/${{ matrix.dataset }}.jsonl --test-half --out results/${{ matrix.dataset }} --label "${{ matrix.dataset }} public agent runs - test half, runs the predictor never saw"
       - run: cp model.json results/${{ matrix.dataset }}/model.json
+      - run: python -m lab.wander --jsonl data/${{ matrix.dataset }}.jsonl --out results/${{ matrix.dataset }}
       - uses: actions/upload-artifact@v4
         with: {name: "results-${{ matrix.dataset }}", path: "results/${{ matrix.dataset }}"}
   commit:
