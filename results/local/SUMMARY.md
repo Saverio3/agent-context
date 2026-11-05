@@ -22,6 +22,12 @@ What gets re-read: tool 40% · task 25% · system 25% · assistant 10%
 | Tree + echo, only last step in full (new) | no | 30.1% | 60.3% | 59.3% | 4.5% |
 | Tree + echo + cap long fresh outputs (new) | no | 24.6% | 49.2% | 46.5% | 2.1% |
 | Tree + cap + safety net (new) | no | 22.8% | 45.6% | 43.0% | 2.1% |
+| R1 Working set (new) | no | 23.2% | 46.4% | 43.7% | 2.1% |
+| R2 Slow decay (new) | no | 24.2% | 48.5% | 45.8% | 2.1% |
+| R3 Keep the agent's notes (new) | no | 22.6% | 45.2% | 42.6% | 1.6% |
+| R4 Sticky unfold (new) | no | 23.7% | 47.5% | 44.8% | 2.1% |
+| R5 All guards combined (new) | no | 20.0% | 40.1% | 37.5% | 1.6% |
+| R6 Lean guards (new) | no | 22.4% | 44.8% | 42.1% | 2.1% |
 
 **Fixed instructions** (system prompt + task) are identical on every step; providers cache them, so the conversation column is the part a method can really change. **Net** = conversation saving after charging, for every miss, the cost of fetching the stored message back (15 tokens + its size), so nothing is lost. **Miss rate** = share of the agent's references to earlier information (names, paths, numbers, error types it wrote) that were hidden from it at that moment. 0% = it never needed something the method hid. Lossless methods can still show misses, because a pointer replaces an old copy; the agent would fetch it on request.
 
@@ -42,4 +48,10 @@ What gets re-read: tool 40% · task 25% · system 25% · assistant 10%
 - **Tree + echo (new)**: Tree memory, but each folded old output keeps its first line plus up to 8 lines mentioning things the agent or task already named, instead of one line only. Aims at tree-level savings with fewer misses.
 - **Tree + echo, only last step in full (new)**: Same as Tree + echo, but only the most recent step stays in full (more aggressive).
 - **Tree + echo + cap long fresh outputs (new)**: Tree + echo, and even recent outputs longer than 120 lines show only the first 60 and last 40 lines (the rest stored). Targets huge logs and file dumps that dominate OpenHands runs.
-- **Tree + cap + safety net (new)**: Tree + echo + cap, plus three guards: (1) any old output whose names the agent used in its last 2 message uses at least 4 of its names is shown in full again; (2) error and traceback lines are never hidden.
+- **Tree + cap + safety net (new)**: Tree + echo + cap, plus two guards: (1) a folded tool output is shown in full again when the agent's latest message uses at least 4 of its names; (2) error and traceback lines are never hidden.
+- **R1 Working set (new)**: Tree + echo + cap, but the latest view of any file the agent touched in its last 6 steps is never folded. Targets file-view misses.
+- **R2 Slow decay (new)**: Instead of folding abruptly at 3 steps, outputs aged 3-8 steps keep up to 20 relevant lines; only older ones shrink to 8.
+- **R3 Keep the agent's notes (new)**: Tree + echo + cap, but the agent's own old messages are never shortened (only tool outputs fold).
+- **R4 Sticky unfold (new)**: When the agent's last 2 messages use 3+ names from a folded output, that output is shown again in full: proactive fetch-back.
+- **R5 All guards combined (new)**: Working set + slow decay + keep notes + sticky unfold + error lines always kept, on top of tree + echo + cap.
+- **R6 Lean guards (new)**: Working set + sticky unfold only: the two guards aimed at the most common miss (recent file views), keeping the rest aggressive.
