@@ -1,0 +1,23 @@
+name: visem-csv
+on: {workflow_dispatch: {}}
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -q remotezip opencv-python-headless numpy pandas scipy scikit-learn certifi
+      - run: |
+          AIA=$(echo | openssl s_client -connect datasets.simula.no:443 -servername datasets.simula.no 2>/dev/null | openssl x509 -noout -text | grep -oP 'CA Issuers - URI:\K\S+' | head -1)
+          curl -sSL "$AIA" -o inter.der && (openssl x509 -inform DER -in inter.der -out inter.pem 2>/dev/null || cp inter.der inter.pem)
+          cat "$(python -c 'import certifi;print(certifi.where())')" inter.pem > bundle.pem
+          REQUESTS_CA_BUNDLE=$PWD/bundle.pem python pilots/sperm/fetch_visem_csv.py data/visem/full
+          for f in data/visem/full/*/*.csv; do echo "== $f"; head -3 "$f"; done
+      - run: FEATURES=results/sperm/video_features_raw.csv python pilots/sperm/hormones.py data/visem/full
+      - run: |
+          git config user.name "lab-bot"; git config user.email "lab-bot@users.noreply.github.com"
+          git add data/visem/full results/sperm && git commit -m "VISEM participant tables + hormone results [skip ci]" || exit 0
+          for i in 1 2 3; do git pull --rebase -q && git push && break; sleep 5; done

@@ -59,13 +59,15 @@ def video_features(path):
 
 
 rows = []
-for v in sorted([p for p in glob.glob(f"{ROOT}/**/*", recursive=True) if p.lower().endswith((".avi", ".mp4"))]):
+PRE = os.environ.get("FEATURES")
+for v in ([] if PRE else sorted([p for p in glob.glob(f"{ROOT}/**/*", recursive=True) if p.lower().endswith((".avi", ".mp4"))])):
     m = re.search(r"(\d+)", os.path.basename(v))
     f = video_features(v)
     if f and m:
         f["ID"] = int(m.group(1)); f["file"] = os.path.basename(v); rows.append(f)
         print(os.path.basename(v), "ok", flush=True)
-F = pd.DataFrame(rows)
+F = pd.read_csv(PRE) if PRE else pd.DataFrame(rows)
+if "file" not in F: F["file"] = F.ID.astype(str) + ".avi"
 vm = [x for x in glob.glob(f"{ROOT}/**/*videos*.csv", recursive=True)]
 if vm:  # official video -> participant mapping, if present
     t = pd.read_csv(vm[0], sep=None, engine="python"); print(t.head())
@@ -86,6 +88,7 @@ def load(name):
         return None
     d = pd.read_csv(p[0], sep=None, engine="python")
     d.columns = [c.strip() for c in d.columns]
+    print(name, p[0], d.shape, list(d.columns)[:6]); print(d.head(3))
     d = d.rename(columns={d.columns[0]: "ID"})
     return d.apply(lambda s: pd.to_numeric(s.astype(str).str.replace(",", "."), errors="coerce"))
 
