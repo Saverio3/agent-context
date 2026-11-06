@@ -9,8 +9,8 @@ permissions:
   contents: write
 jobs:
   detector:
-    strategy: {matrix: {part: [process, network]}}
-    if: github.event_name == 'push' || inputs.jobs == 'all' || inputs.jobs == 'detector'
+    strategy: {matrix: {part: "${{ fromJSON(inputs.jobs == 'network' && '[\"network\"]' || '[\"process\",\"network\"]') }}"}}
+    if: github.event_name == 'push' || inputs.jobs == 'all' || inputs.jobs == 'detector' || inputs.jobs == 'network'
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
@@ -23,7 +23,6 @@ jobs:
           T=$(cmake --build llama.cpp/build --target help | grep -oE '[A-Za-z_-]*rpc-server' | sort -u | head -1)
           echo "rpc target: $T"
           cmake --build llama.cpp/build -j4 --target llama-server llama-bench $T >/dev/null
-          [ -e llama.cpp/build/bin/rpc-server ] || ln -s "$(ls llama.cpp/build/bin/*rpc-server* | head -1)" llama.cpp/build/bin/rpc-server
           ls llama.cpp/build/bin
       - run: curl -sSL -o model.gguf https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf && ls -la model.gguf
       - run: python pilots/detector/run.py ${{ matrix.part }}

@@ -11,6 +11,7 @@ import csv, os, random, shutil, signal, socket, subprocess, sys, threading, time
 import numpy as np
 
 B = os.environ.get("LLAMA_BIN", "llama.cpp/build/bin")
+RPC = f"{B}/ggml-rpc-server" if os.path.exists(f"{B}/ggml-rpc-server") else f"{B}/rpc-server"
 MODEL = os.environ.get("MODEL", "model.gguf")
 DUR, REPS, DT, WIN = 30, 3, 0.5, 10          # seconds per run, repetitions, sample period, samples per window
 os.makedirs("data/detector", exist_ok=True)
@@ -181,10 +182,10 @@ def net_windows(pk, label, kind, rep, wsec=5.0):
 def run_network_part():
     rows = []
     def ai_split(rep):
-        a = subprocess.Popen(f"{B}/rpc-server -p 50052 -t 1 > /tmp/rpc_a.log 2>&1", shell=True, preexec_fn=os.setsid)
-        b = subprocess.Popen(f"{B}/rpc-server -p 50053 -t 1 > /tmp/rpc_b.log 2>&1", shell=True, preexec_fn=os.setsid)
+        a = subprocess.Popen(f"{RPC} -p 50052 -t 1 > /tmp/rpc_a.log 2>&1", shell=True, preexec_fn=os.setsid)
+        b = subprocess.Popen(f"{RPC} -p 50053 -t 1 > /tmp/rpc_b.log 2>&1", shell=True, preexec_fn=os.setsid)
         time.sleep(3)
-        s = subprocess.Popen(f"{B}/llama-server -m {MODEL} --port 8091 -t 1 -c 2048 -ngl 99 --rpc 127.0.0.1:50052,127.0.0.1:50053 > /tmp/llama_rpc.log 2>&1", shell=True, preexec_fn=os.setsid)
+        s = subprocess.Popen(f"{B}/llama-server -m {MODEL} --port 8091 -t 1 -c 2048 -ngl 99 --rpc 127.0.0.1:50052,127.0.0.1:50053 --device RPC0,RPC1 > /tmp/llama_rpc.log 2>&1", shell=True, preexec_fn=os.setsid)
         ok = wait_port(8091, 300)
         if not ok or rep == 0:
             for lf in ("/tmp/rpc_a.log", "/tmp/llama_rpc.log"):
