@@ -144,12 +144,13 @@ def run_process_part():
 
 def capture(ports, dur):
     flt = " or ".join(f"tcp port {p}" for p in ports)
-    cap = subprocess.Popen(f"sudo timeout {dur} tcpdump -i lo -nn -tt -q '{flt}' 2>/dev/null", shell=True, stdout=subprocess.PIPE, text=True)
+    cap = subprocess.Popen(f"sudo timeout {dur} tcpdump -l -i lo -nn -tt -q '{flt}' 2>/dev/null", shell=True, stdout=subprocess.PIPE, text=True)
     out, _ = cap.communicate()
     pk = []
     for l in out.splitlines():
         try:
-            t, _, src, _, dst, _, _, n = l.split()[:8]
+            f = l.split()
+            t, src, dst, n = f[0], f[2], f[4], f[-1]
             pk.append((float(t), int(n), src.rsplit(".", 1)[1], dst.rstrip(":").rsplit(".", 1)[1]))
         except Exception:
             pass
@@ -180,10 +181,14 @@ def net_windows(pk, label, kind, rep, wsec=5.0):
 def run_network_part():
     rows = []
     def ai_split(rep):
-        a = sh(f"{B}/rpc-server -p 50052 -t 1"); b = sh(f"{B}/rpc-server -p 50053 -t 1")
+        a = subprocess.Popen(f"{B}/rpc-server -p 50052 -t 1 > /tmp/rpc_a.log 2>&1", shell=True, preexec_fn=os.setsid)
+        b = subprocess.Popen(f"{B}/rpc-server -p 50053 -t 1 > /tmp/rpc_b.log 2>&1", shell=True, preexec_fn=os.setsid)
         time.sleep(3)
-        s = sh(f"{B}/llama-server -m {MODEL} --port 8091 -t 1 -c 2048 -ngl 99 --rpc 127.0.0.1:50052,127.0.0.1:50053")
+        s = subprocess.Popen(f"{B}/llama-server -m {MODEL} --port 8091 -t 1 -c 2048 -ngl 99 --rpc 127.0.0.1:50052,127.0.0.1:50053 > /tmp/llama_rpc.log 2>&1", shell=True, preexec_fn=os.setsid)
         ok = wait_port(8091, 300)
+        if not ok or rep == 0:
+            for lf in ("/tmp/rpc_a.log", "/tmp/llama_rpc.log"):
+                print("----", lf, "\n" + "".join(open(lf).readlines()[-25:]), flush=True)
         stop = threading.Event(); th = threading.Thread(target=client_loop, args=(8091, stop)); th.start()
         time.sleep(3)
         pk = capture([50052, 50053], DUR)
@@ -217,6 +222,8 @@ def run_network_part():
             pk, ok = fn(rep)
             w = net_windows(pk, label, kind, rep); rows += w
             print("net", label, rep, ok, len(pk), "packets", len(w), "windows", flush=True)
+    if not rows:
+        print("no network windows captured"); return
     with open("data/detector/network.csv", "w", newline="") as f:
         wr = csv.DictWriter(f, fieldnames=list(rows[0])); wr.writeheader(); wr.writerows(rows)
 
