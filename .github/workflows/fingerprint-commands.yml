@@ -1,0 +1,37 @@
+name: fingerprint-commands
+on:
+  push:
+    paths: ["pilots/fingerprint/commands_only.py", ".github/workflows/fingerprint-commands.yml"]
+  workflow_dispatch:
+    inputs:
+      jobs: {description: "all|fp", default: "all"}
+permissions:
+  contents: write
+jobs:
+  fingerprint-commands:
+    if: github.event_name == 'push' || inputs.jobs == 'all' || inputs.jobs == 'fp'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -q boto3 numpy scipy scikit-learn
+      - run: python pilots/fingerprint/fetch_mini.py 500
+      - run: python pilots/fingerprint/commands_only.py data/mini.jsonl results/fingerprint
+      - uses: actions/upload-artifact@v4
+        with: {name: fp, path: results/fingerprint/COMMANDS_ONLY.md}
+  commit:
+    needs: [fingerprint-commands]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: {path: dl}
+      - run: |
+          mkdir -p results/fingerprint
+          [ -d dl/fp ] && cp dl/fp/* results/fingerprint/ || true
+          git config user.name "lab-bot"; git config user.email "lab-bot@users.noreply.github.com"
+          git add results && git commit -m "fingerprint-commands results [skip ci]" || exit 0
+          for i in 1 2 3; do git pull --rebase -q && git push && break; sleep 5; done

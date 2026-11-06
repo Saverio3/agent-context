@@ -1,19 +1,22 @@
-# agent-context lab
+# AI-agent early warning: lures, fingerprints and containment
 
-Coding agents re-read their whole history before every step. This lab tests ways to make them re-read less,
-on real public agent runs, with the same scores for every method and failures kept in the table.
+Research code for a project that **catches AI agents doing harm, names the model behind them, and works out how to
+contain a self-copying AI**. Everything runs on GitHub Actions; results are committed to `results/`.
+Older, unrelated experiments are preserved on the branch `archive-2026-11-06`.
 
-- `lab/methods/` — one file per method (add a file to add a method)
-- `lab/core.py` — replay + scoring (tokens re-read, miss rate)
-- `lab/fetch_data.py` — downloads public runs from Hugging Face (runs on GitHub Actions)
-- `results/` — written automatically; `results/local/` = 22 small sample runs in `data/local/`
+Ethics: every test is passive or sandboxed. No live systems are attacked, bait only ever pays out dust, the
+"malware" in `pilots/aimalware` is a harmless imitation talking to a mock AI server, and nothing "hacks back".
 
-Run locally: `python -m lab.run --local data/local --out results/local`
+## Pieces and pilots
 
-Scores: **tokens saved** vs re-reading everything; **miss rate** = share of the agent's references to earlier
-facts (names, paths, numbers, error types) that the method had hidden at that moment. Tokens ≈ characters / 4.
+| Piece | Folder | What it tests | Headline result |
+|---|---|---|---|
+| A. Containment | `pilots/epidemic` | Where a self-copying AI lives (home devices, PCs, cloud, web2/web3 GPU) and which shields stop it; v4 calibrated with real Mirai clean-up data | Survivors retreat to cloud + web3 GPU; it dies only if accounts are closed faster than it can open them |
+| B. Lures | `pilots/lures`, `pilots/huntsim`, `pilots/sensors` | Do AI models take AI-targeted bait? How do they look for targets? How fast do strategies catch careful agents? | Bait picked 49–100% vs 5–18% for ordinary results; 10,000 smart lures catch searching agents in hours vs 100,000 random decoys in ~8 days |
+| B. On-chain bait | `pilots/chainbait` | Do AI agents pick bait contracts? Local-chain detection demo | Bait contracts picked 69–100% vs 5–10% ordinary; attackers flagged in the same block, 0 false alarms |
+| B. Worm tripwires | `pilots/tripwire` | Do AI email assistants obey and pass on a harmless tripwire (Morris II-style worm detection)? | running |
+| C. Fingerprints | `pilots/fingerprint` | Naming the model from commands (86%), website behaviour (67%), tool calls (30%) | see results/fingerprint |
+| C. Modified models | `pilots/retrained` | Do bait and fingerprint survive safety-removed ("abliterated") models? | Bait works as well or better; family still recognisable |
+| Device shield | `pilots/detector`, `pilots/aimalware` | Spotting AI programs on a machine; spotting malware that calls AI services (PROMPTFLUX-like) | Detector weak so far; AI-malware refined rule flags the imitation, not legit coding agents |
 
-## Need-to-know lab (agents talking to each other)
-
-`lab/n2k/` replays 55 public ChatDev multi-agent runs (`data/chatdev/`, from OpenBMB/ChatDev branch chatdev1.0)
-under 7 ways of sending messages. Run: `python -m lab.n2k.run data/chatdev` → `results/need_to_know/SUMMARY.md`.
+Summary of all numbers: `pilots/AGENT-SECURITY-RESULTS-2026-11-06.md`.
