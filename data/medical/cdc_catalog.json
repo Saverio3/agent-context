@@ -11,14 +11,14 @@
    "2026-08-07T16:43:51.000Z"
   ],
   [
-   "hhvg-83jq",
-   "Examination of SARS-CoV-2 serological test results from multiple commercial and laboratory platforms with an in-house serum panel",
-   "2023-12-13T17:49:20.000Z"
-  ],
-  [
    "jr58-6ysp",
    "SARS-CoV-2 Variant Proportions",
    "2026-10-23T14:21:01.000Z"
+  ],
+  [
+   "hhvg-83jq",
+   "Examination of SARS-CoV-2 serological test results from multiple commercial and laboratory platforms with an in-house serum panel",
+   "2023-12-13T17:49:20.000Z"
   ],
   [
    "atcp-73re",
@@ -41,24 +41,14 @@
    "2026-10-30T20:10:27.000Z"
   ],
   [
-   "wi5c-cscz",
-   "2020-2021 Nationwide Blood Donor Seroprevalence Survey Combined Infection- and Vaccination-Induced Seroprevalence Estimates",
-   "2022-02-18T14:51:55.000Z"
-  ],
-  [
-   "gvsb-yw6g",
-   "Percent Positivity of COVID-19 Nucleic Acid Amplification Tests by HHS Region, National Respiratory and Enteric Virus Surveillance System",
-   "2026-11-05T16:30:22.000Z"
-  ],
-  [
    "8ve6-tiah",
    "Persistence of SARS-CoV-2 on N95 filtering facepiece respirators: implications for reuse",
    "2024-11-15T19:25:28.000Z"
   ],
   [
-   "mtc3-kq6r",
-   "2020-2021 Nationwide Blood Donor Seroprevalence Survey Infection-Induced Seroprevalence Estimates",
-   "2022-02-18T14:52:11.000Z"
+   "wi5c-cscz",
+   "2020-2021 Nationwide Blood Donor Seroprevalence Survey Combined Infection- and Vaccination-Induced Seroprevalence Estimates",
+   "2022-02-18T14:51:55.000Z"
   ],
   [
    "ga52-qyaz",
@@ -69,6 +59,16 @@
    "3rge-nu2a",
    "Rates of COVID-19 Cases or Deaths by Age Group and Vaccination Status",
    "2023-02-22T19:50:33.000Z"
+  ],
+  [
+   "mtc3-kq6r",
+   "2020-2021 Nationwide Blood Donor Seroprevalence Survey Infection-Induced Seroprevalence Estimates",
+   "2022-02-18T14:52:11.000Z"
+  ],
+  [
+   "gvsb-yw6g",
+   "Percent Positivity of COVID-19 Nucleic Acid Amplification Tests by HHS Region, National Respiratory and Enteric Virus Surveillance System",
+   "2026-11-05T16:30:22.000Z"
   ],
   [
    "seuz-s2cv",
@@ -108,14 +108,14 @@
    "2026-10-30T15:07:19.000Z"
   ],
   [
-   "xpxn-rzgz",
-   "CDC Wastewater Data for Mpox",
-   "2026-10-30T15:04:30.000Z"
-  ],
-  [
    "mtpu-urpp",
    "CDC Wastewater Data for Avian Influenza A (H5)",
    "2026-10-30T15:06:12.000Z"
+  ],
+  [
+   "xpxn-rzgz",
+   "CDC Wastewater Data for Mpox",
+   "2026-10-30T15:04:30.000Z"
   ],
   [
    "45cq-cw4i",
@@ -135,24 +135,24 @@
    "2026-10-30T13:49:20.000Z"
   ],
   [
-   "7dk4-g6vg",
-   "Weekly United States COVID-19 Hospitalization Metrics by Jurisdiction \u2013 ARCHIVED",
-   "2025-01-17T17:01:44.000Z"
-  ],
-  [
    "mpgq-jmmr",
    "Weekly Hospital Respiratory Data (HRD) Metrics by Jurisdiction, National Healthcare Safety Network (NHSN) (Preliminary)",
    "2026-11-04T16:40:57.000Z"
   ],
   [
-   "akn2-qxic",
-   "Weekly United States COVID-19 Hospitalization Metrics by County \u2013 ARCHIVED",
-   "2025-01-17T17:03:49.000Z"
-  ],
-  [
    "39z2-9zu6",
    "United States COVID-19 Hospitalization Metrics by Jurisdiction, Timeseries \u2013 ARCHIVED",
    "2025-01-17T17:02:10.000Z"
+  ],
+  [
+   "7dk4-g6vg",
+   "Weekly United States COVID-19 Hospitalization Metrics by Jurisdiction \u2013 ARCHIVED",
+   "2025-01-17T17:01:44.000Z"
+  ],
+  [
+   "akn2-qxic",
+   "Weekly United States COVID-19 Hospitalization Metrics by County \u2013 ARCHIVED",
+   "2025-01-17T17:03:49.000Z"
   ],
   [
    "9t9r-e5a3",
@@ -185,14 +185,14 @@
    "2026-10-30T13:53:11.000Z"
   ],
   [
-   "dt66-w6m6",
-   "Weekly COVID-19 County Level of Community Transmission as Originally Posted - ARCHIVED",
-   "2024-05-08T14:01:48.000Z"
-  ],
-  [
    "ahrf-yqdt",
    "Preliminary U.S. COVID-19 Burden Estimates",
    "2026-10-23T15:51:36.000Z"
+  ],
+  [
+   "dt66-w6m6",
+   "Weekly COVID-19 County Level of Community Transmission as Originally Posted - ARCHIVED",
+   "2024-05-08T14:01:48.000Z"
   ],
   [
    "3nnm-4jni",
@@ -207,14 +207,14 @@
    "2026-10-30T13:40:15.000Z"
   ],
   [
-   "29hc-w46k",
-   "RSV-NET Rates and Clinical Data",
-   "2026-11-05T18:43:16.000Z"
-  ],
-  [
    "aemt-mg7g",
    "Weekly United States Hospitalization Metrics by Jurisdiction, During Mandatory Reporting Period from August 1, 2020 to April 30, 2024, and for Data Reported Voluntarily Beginning May 1, 2024, National Healthcare Safety Network (NHSN) - ARCHIVED",
    "2024-11-01T17:49:48.000Z"
+  ],
+  [
+   "29hc-w46k",
+   "RSV-NET Rates and Clinical Data",
+   "2026-11-05T18:43:16.000Z"
   ],
   [
    "ahrf-yqdt",
@@ -232,14 +232,14 @@
    "2026-10-30T13:49:20.000Z"
   ],
   [
-   "6jg4-xsqq",
-   "COVID-NET Rates and Clinical Data",
-   "2026-11-05T18:44:57.000Z"
-  ],
-  [
    "mpgq-jmmr",
    "Weekly Hospital Respiratory Data (HRD) Metrics by Jurisdiction, National Healthcare Safety Network (NHSN) (Preliminary)",
    "2026-11-04T16:40:57.000Z"
+  ],
+  [
+   "6jg4-xsqq",
+   "COVID-NET Rates and Clinical Data",
+   "2026-11-05T18:44:57.000Z"
   ],
   [
    "sumd-iwm8",
