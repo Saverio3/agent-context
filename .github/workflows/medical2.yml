@@ -1,0 +1,72 @@
+name: medical2
+on:
+  push:
+    paths: ["pilots/natality/**", "pilots/sperm/hormones.py", "pilots/sperm/fetch_visem.py", "pilots/fingerprint/commands_only.py", ".github/workflows/medical2.yml"]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fingerprint-commands:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -q boto3 numpy scipy scikit-learn
+      - run: python pilots/fingerprint/fetch_mini.py 500
+      - run: python pilots/fingerprint/commands_only.py data/mini.jsonl results/fingerprint
+      - uses: actions/upload-artifact@v4
+        with: {name: fp, path: results/fingerprint/COMMANDS_ONLY.md}
+  sperm-hormones:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - name: free disk
+        run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL; df -h / | tail -1
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -q huggingface_hub opencv-python-headless numpy pandas scipy scikit-learn
+      - run: python pilots/sperm/fetch_visem.py /tmp/visem && df -h / | tail -1 && find /tmp/visem -maxdepth 3 | head -40
+      - run: python pilots/sperm/hormones.py /tmp/visem
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: hormones, path: "results/sperm/HORMONES.md\nresults/sperm/video_features.csv"}
+  natality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -q numpy pandas scikit-learn
+      - name: download 2023 births
+        run: |
+          mkdir -p /tmp/nat && cd /tmp/nat
+          for y in 2023 2022; do
+            for u in "https://ftp.cdc.gov/pub/Health_Statistics/NCHS/Datasets/DVS/natality/Nat${y}us.zip" "https://ftp.cdc.gov/pub/Health_Statistics/NCHS/Datasets/DVS/natality/nat${y}us.zip"; do
+              curl -sSLf -o n.zip "$u" && echo "got $u" && break
+            done
+            [ -s n.zip ] && break
+          done
+          unzip -o -q n.zip && rm n.zip && ls -la
+      - run: python pilots/natality/natality.py "$(ls -S /tmp/nat/* | head -1)"
+      - uses: actions/upload-artifact@v4
+        with: {name: natality, path: results/natality}
+  commit:
+    needs: [fingerprint-commands, sperm-hormones, natality]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: {path: dl}
+      - run: |
+          mkdir -p results/fingerprint results/sperm results/natality
+          [ -d dl/fp ] && cp dl/fp/* results/fingerprint/ || true
+          [ -d dl/hormones ] && cp -r dl/hormones/* results/sperm/ || true
+          [ -d dl/natality ] && cp -r dl/natality/* results/natality/ || true
+          git config user.name "lab-bot"; git config user.email "lab-bot@users.noreply.github.com"
+          git add results && git commit -m "medical2 results [skip ci]" || exit 0
+          for i in 1 2 3; do git pull --rebase -q && git push && break; sleep 5; done
