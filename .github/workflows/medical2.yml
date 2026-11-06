@@ -32,7 +32,14 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - run: pip install -q huggingface_hub remotezip opencv-python-headless numpy pandas scipy scikit-learn
-      - run: python pilots/sperm/fetch_visem_csv.py /tmp/visem && find /tmp/visem -iname "*hormone*" | grep -q .
+      - name: fetch VISEM participant tables (server omits its intermediate cert, so add it from the cert's own AIA link)
+        run: |
+          AIA=$(echo | openssl s_client -connect datasets.simula.no:443 -servername datasets.simula.no 2>/dev/null | openssl x509 -noout -text | grep -oP 'CA Issuers - URI:\K\S+' | head -1)
+          echo "intermediate: $AIA"
+          curl -sSL "$AIA" -o inter.der && (openssl x509 -inform DER -in inter.der -out inter.pem 2>/dev/null || cp inter.der inter.pem)
+          cat "$(python -c 'import certifi;print(certifi.where())')" inter.pem > bundle.pem
+          REQUESTS_CA_BUNDLE=$PWD/bundle.pem python pilots/sperm/fetch_visem_csv.py /tmp/visem
+          find /tmp/visem -iname "*hormone*" | grep -q .
       - run: python pilots/sperm/fetch_visem.py /tmp/visem && df -h / | tail -1 && find /tmp/visem -maxdepth 3 | head -40
       - run: python pilots/sperm/hormones.py /tmp/visem
       - uses: actions/upload-artifact@v4
