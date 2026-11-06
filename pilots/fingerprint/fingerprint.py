@@ -26,8 +26,12 @@ def actions(msgs):
             continue
         blocks = CODE.findall(text)
         cmd = blocks[-1].strip() if blocks else ""
-        w = WORD.findall(cmd.split("\n")[0]) if cmd else []
-        out.append((w[0].lower() if w else "none", text))
+        verb = "none"
+        for seg in re.split(r"&&|\|\||;|\n", cmd):
+            w = WORD.findall(seg)
+            if w and w[0].lower() not in ("cd", "export", "set", "source"):
+                verb = w[0].lower(); break
+        out.append((verb, text))
     return out
 
 
@@ -40,7 +44,9 @@ def tokens(acts):
         pre = text.split("```")[0].strip()
         ws = pre.split()
         if ws:
-            t.append("O_" + "_".join(w.lower().strip(".,:!") for w in ws[:2]))
+            op = [w.lower().strip(".,:!") for w in ws[:2]]
+            if all(re.fullmatch(r"[a-z']+", w) for w in op):
+                t.append("O_" + "_".join(op))
         n = len(pre)
         t.append(f"L_{min(9, n // 150)}")
         if re.search(r"^#+ ", pre, re.M): t.append("F_heading")
@@ -57,6 +63,7 @@ def main(path, out):
     for line in open(path):
         d = json.loads(line)
         _, model, inst = (d["id"].split(":", 2) + ["", ""])[:3]
+        inst = re.sub(r"[^A-Za-z0-9_.-].*$", "", inst) or inst
         acts = actions(d["messages"])
         if len(acts) >= 4 and model and sum(x == "none" for x, _ in acts) <= len(acts) / 2:
             runs.append((model, inst, acts))

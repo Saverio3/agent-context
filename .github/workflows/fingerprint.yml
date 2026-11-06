@@ -8,16 +8,16 @@ permissions:
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
-      - run: pip install huggingface_hub pyarrow numpy scikit-learn
-      - run: python -m lab.fetch_data nebius --n 20000
-      - run: python -c "import json,collections; c=collections.Counter(json.loads(l)['id'].split(':')[1] for l in open('data/nebius.jsonl')); print(c.most_common(40))"
-      - run: python pilots/fingerprint/fingerprint.py data/nebius.jsonl results/fingerprint
+      - run: pip install boto3 numpy scikit-learn
+      - run: python pilots/fingerprint/fetch_mini.py 500
+      - run: python -c "import json;d=json.loads(open('data/mini.jsonl').readline());print([ (r,t[:200]) for r,t in d['messages'][:4]])"
+      - run: python pilots/fingerprint/fingerprint.py data/mini.jsonl results/fingerprint
       - run: |
           git config user.name "lab-bot"; git config user.email "lab-bot@users.noreply.github.com"
-          git add results/fingerprint && git commit -m "fingerprint results [skip ci]" || exit 0
+          git add results/fingerprint && git commit -m "fingerprint results (13 models) [skip ci]" || exit 0
           for i in 1 2 3; do git pull --rebase -q && git push && break; sleep 5; done
