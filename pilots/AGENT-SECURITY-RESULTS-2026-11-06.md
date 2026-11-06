@@ -20,3 +20,10 @@
 - Terminal commands only: 86% (10 models; 44% after 3 commands, 75% after 25).
 - Website view (clicks, typing, scrolling; 4 models, same agent software): 67% (47% after 3 actions); random 25%.
 - API/tool-service view (tau-bench, 25 model configs): 30%; random 4%. Some models very distinctive (gpt-oss-20b 80%, Qwen3-Coder 71%).
+
+## Evening additions (6 Nov)
+- Epidemic v3 (habitats split; 3-day detection; 80 runs): no shields → lives across TV boxes 23%, cloud 25%, ordinary PCs 15%, web3 GPU 14%, web2 GPU 13%, gaming PCs 10%.
+  ISP + cloud + web2 + web3 checks → 78% alive, living ~47% cloud / ~46% web3 GPU; + device shield → 72%; + storage takedown → 11% (survivors: cloud 62%, web3 33%).
+  Everything except web3 checks → 45%; everything except device shield → 15%.
+- Budget scaling (best strategy per agent): 1,000 → searchers 18–37 h, foragers 16 days; 10,000 → 5–9 h and 40 h, random scanners 72 days; 100,000 → 4–8 h, 4 h, 7 days.
+- GreyNoise (largest commercial internet sensor network): ~5,000 sensors in 80 countries, ~0.5 billion sessions/day; median 9 days early warning before vendor alerts on edge-device attacks.
