@@ -36,9 +36,12 @@ def from_html(path):
         a, b = clean_team(L[i - 2]), clean_team(L[i - 1])
         if BAD.match(a) or BAD.match(b) or SCORE.match(L[i - 1]) or len(a) < 2 or len(b) < 2 or a == b:
             continue
-        if re.fullmatch(r"[\d.,:\s]+", a + b):
+        if re.fullmatch(r"[\d.,:\s*]+", a) or re.fullmatch(r"[\d.,:\s*]+", b):
             continue
-        out.append(dict(league=league, year=year, source=os.path.basename(path), order=k, home=a, away=b,
+        if re.search(r"(?i)rank|points|score|total|team$|^teams?$|result", a + " " + b):
+            continue
+        phase = 1 if (league == "SPL") else 0
+        out.append(dict(league=league, year=year, phase=phase, source=os.path.basename(path), order=k, home=a, away=b,
                         home_goals=int(s.group(1)), away_goals=int(s.group(2)),
                         pens=f"{s.group(3)}:{s.group(4)}" if s.group(3) else ""))
         k += 1
@@ -57,7 +60,7 @@ def from_csv(path, year_hint):
     out = []
     for k, r in enumerate(rows[rows.index(hdr) + 1:]):
         try:
-            out.append(dict(league="SPL", year=year_hint, source=os.path.basename(path), order=k,
+            out.append(dict(league="SPL", year=year_hint, phase=0, source=os.path.basename(path), order=k,
                             home=clean_team(r[h[0]]), away=clean_team(r[a[0]]),
                             home_goals=int(r[h[1]]), away_goals=int(r[a[1]]), pens=""))
         except (ValueError, IndexError):
@@ -69,7 +72,7 @@ def main():
     raw = "data/humanoid/raw"
     rows = []
     for p in sorted(glob.glob(f"{raw}/*.html")):
-        if re.search(r"results", p):
+        if re.search(r"results", p) and not re.search(r"results-?_?2004|hsl.robocup.org_results_\.html", p):
             rows += from_html(p)
     # map each sheet to the year of the page that embeds it
     sheet_year = {}
