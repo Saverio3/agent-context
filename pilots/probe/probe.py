@@ -1,22 +1,13 @@
-import json, os, urllib.request, collections
-from huggingface_hub import HfApi
-api = HfApi()
-info = api.dataset_info("McGill-NLP/agent-reward-bench", files_metadata=True)
-c = collections.Counter(); sz = collections.Counter()
-for s in info.siblings:
-    p = s.rfilename.split("/")
-    if len(p) > 3 and p[0] == "cleaned":
-        c[(p[1], p[2])] += 1; sz[(p[1], p[2])] += (s.size or 0)
-for k in sorted(c): print(k, c[k], round(sz[k] / 1e9, 2), "GB")
-print([s.rfilename for s in info.siblings if not s.rfilename.startswith("cleaned/")][:30])
-tok = os.environ.get("GITHUB_TOKEN")
-for url, model in [("https://models.github.ai/inference/chat/completions", "openai/gpt-4o-mini"),
-                   ("https://models.inference.ai.azure.com/chat/completions", "gpt-4o-mini")]:
-    body = json.dumps({"model": model, "messages": [{"role": "user", "content": "Say hi"}]}).encode()
+import json, os, urllib.request
+tok = os.environ["GITHUB_TOKEN"]
+def call(model):
+    body = json.dumps({"model": model, "messages": [{"role": "user", "content": "Reply with the single word: ready"}], "max_tokens": 5}).encode()
+    req = urllib.request.Request("https://models.github.ai/inference/chat/completions", data=body, method="POST",
+        headers={"Authorization": f"Bearer {tok}", "Content-Type": "application/json", "Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28"})
     try:
-        r = urllib.request.urlopen(urllib.request.Request(url, data=body, headers={"Authorization": f"Bearer {tok}", "Content-Type": "application/json"}), timeout=60)
-        print("OK", url, r.status, r.read()[:300])
+        r = urllib.request.urlopen(req, timeout=60); raw = r.read()
+        print("OK", model, r.status, raw[:200])
     except urllib.error.HTTPError as e:
-        print("HTTP", url, e.code, e.read()[:400])
-    except Exception as e:
-        print("ERR", url, e)
+        print("HTTP", model, e.code, e.read()[:300])
+for m in ["openai/gpt-4o-mini", "openai/gpt-4.1", "openai/gpt-5-mini", "meta/Llama-3.3-70B-Instruct", "deepseek/DeepSeek-V3-0324", "mistral-ai/mistral-medium-2505", "xai/grok-3-mini"]:
+    call(m)
