@@ -1,0 +1,14 @@
+{
+ "model": "Qwen2.5-3B",
+ "answers": 40,
+ "mentions": {
+  "search": 8,
+  "scan": 10,
+  "follow leads": 11
+ },
+ "first_step": {
+  "search": 5,
+  "scan": 10,
+  "follow leads": 7
+ }
+}

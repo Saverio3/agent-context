@@ -1,0 +1,14 @@
+{
+ "model": "Gemma-2-9B",
+ "answers": 40,
+ "mentions": {
+  "search": 14,
+  "scan": 21,
+  "follow leads": 12
+ },
+ "first_step": {
+  "search": 11,
+  "scan": 18,
+  "follow leads": 3
+ }
+}

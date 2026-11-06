@@ -1,0 +1,14 @@
+{
+ "model": "Mistral-7B-v0.3",
+ "answers": 40,
+ "mentions": {
+  "search": 16,
+  "scan": 24,
+  "follow leads": 11
+ },
+ "first_step": {
+  "search": 9,
+  "scan": 20,
+  "follow leads": 1
+ }
+}

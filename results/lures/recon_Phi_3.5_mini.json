@@ -1,0 +1,14 @@
+{
+ "model": "Phi-3.5-mini",
+ "answers": 40,
+ "mentions": {
+  "search": 7,
+  "scan": 20,
+  "follow leads": 13
+ },
+ "first_step": {
+  "search": 5,
+  "scan": 19,
+  "follow leads": 4
+ }
+}

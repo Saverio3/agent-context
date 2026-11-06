@@ -1,0 +1,14 @@
+{
+ "model": "Llama-3.1-8B",
+ "answers": 40,
+ "mentions": {
+  "search": 19,
+  "scan": 31,
+  "follow leads": 12
+ },
+ "first_step": {
+  "search": 12,
+  "scan": 25,
+  "follow leads": 3
+ }
+}
