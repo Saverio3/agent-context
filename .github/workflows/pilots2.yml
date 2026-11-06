@@ -1,0 +1,69 @@
+name: pilots2
+on:
+  push:
+    paths: ["pilots/detector/**", "pilots/hfspread/**", "pilots/sperm/**", "pilots/medical/**", ".github/workflows/pilots2.yml"]
+  workflow_dispatch:
+    inputs:
+      jobs: {description: "which jobs", default: "all"}
+permissions:
+  contents: write
+jobs:
+  detector:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg psmisc tcpdump cmake build-essential >/dev/null
+      - run: pip install numpy scikit-learn
+      - run: |
+          git clone --depth 1 https://github.com/ggml-org/llama.cpp
+          cmake -S llama.cpp -B llama.cpp/build -DGGML_RPC=ON -DLLAMA_CURL=OFF -DCMAKE_BUILD_TYPE=Release >/dev/null
+          cmake --build llama.cpp/build -j4 --target llama-server llama-bench rpc-server >/dev/null
+          ls llama.cpp/build/bin
+      - run: curl -sSL -o model.gguf https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf && ls -la model.gguf
+      - run: python pilots/detector/run.py both
+      - run: python pilots/detector/analyse.py
+      - uses: actions/upload-artifact@v4
+        with: {name: detector, path: "data/detector\nresults/detector"}
+  hfspread:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - run: python pilots/hfspread/collect.py
+      - uses: actions/upload-artifact@v4
+        with: {name: hfspread, path: data/hfspread}
+  sperm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - run: df -h / | tail -1
+      - run: python pilots/sperm/extract.py
+      - uses: actions/upload-artifact@v4
+        with: {name: sperm, path: data/visem}
+  medical-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python pilots/medical/check_data.py
+      - uses: actions/upload-artifact@v4
+        with: {name: medical-data, path: data/medical}
+  commit:
+    needs: [detector, hfspread, sperm, medical-data]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: {path: dl}
+      - run: |
+          mkdir -p data results
+          [ -d dl/detector ] && cp -r dl/detector/* . || true
+          [ -d dl/hfspread ] && mkdir -p data/hfspread && cp -r dl/hfspread/* data/hfspread/ || true
+          [ -d dl/sperm ] && mkdir -p data/visem && cp -r dl/sperm/* data/visem/ || true
+          [ -d dl/medical-data ] && mkdir -p data/medical && cp -r dl/medical-data/* data/medical/ || true
+          find data results -size +90M -print -delete || true
+          git config user.name "lab-bot"; git config user.email "lab-bot@users.noreply.github.com"
+          git add data results && git commit -m "pilots2 data [skip ci]" || exit 0
+          for i in 1 2 3; do git pull --rebase -q && git push && break; sleep 5; done
