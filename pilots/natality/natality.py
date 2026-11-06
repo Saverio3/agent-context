@@ -131,3 +131,50 @@ out += ["", "Quarters: mothers sorted by the model's predicted extra risk (fitte
 os.makedirs("results/natality", exist_ok=True)
 open("results/natality/NATALITY.md", "w").write("\n".join(out) + "\n")
 print("\n".join(out))
+
+# ---------------- v2: effect among treated mothers (ATT) — far more precise ----------------
+# For each treated mother: observed outcome minus what a model trained on comparable UNTREATED mothers
+# predicts for her (m0). Average = effect on the treated; its spread across mothers = who carries the risk.
+# No division by tiny treatment probabilities, so intervals are tight.
+from sklearn.ensemble import HistGradientBoostingRegressor as HGR
+Tm = D[D["T"] == 1].reset_index(drop=True)
+C0 = D[D["T"] == 0]
+rng2 = np.random.default_rng(3)
+halfT = rng2.random(len(Tm)) < 0.5
+groups = {"All treated": np.ones(len(Tm), bool), "ART (IVF etc.)": Tm.T_art.values == 1,
+          "Fertility drugs only": Tm.T_art.values == 0, "Age < 30": Tm.age.values < 30,
+          "Age 30–34": (Tm.age.values >= 30) & (Tm.age.values < 35), "Age 35–39": (Tm.age.values >= 35) & (Tm.age.values < 40),
+          "Age 40+": Tm.age.values >= 40, "First baby": Tm.parity.values == 1, "BMI ≥ 30": Tm.bmi_.values >= 30,
+          "Pre-pregnancy hypertension": Tm.phype_y.values == 1, "Medicaid": Tm.medicaid.values == 1}
+o2 = ["", "# v2: Extra risk among mothers who used fertility treatment (effect on the treated)", "",
+      f"{len(Tm):,} treated singleton births compared with what models trained on {len(C0):,} similar untreated births predict for them. "
+      "Percentage points; ± = 95% interval.", "",
+      "| Outcome | Treated rate | Expected without treatment | Extra risk | Lowest predicted-risk quarter | Highest quarter | Top vs bottom |",
+      "|---|---|---|---|---|---|---|"]
+sub = {g: [] for g in groups}
+drv2 = []
+for y in Y:
+    m0 = gbm().fit(C0[X], C0[y]).predict_proba(Tm[X])[:, 1]
+    r = Tm[y].values - m0
+    att, se = r.mean(), r.std() / np.sqrt(len(r))
+    reg = HGR(max_iter=200, learning_rate=0.05, min_samples_leaf=300, random_state=0).fit(Tm[X][halfT], r[halfT])
+    tb = reg.predict(Tm[X][~halfT]); rb = r[~halfT]
+    q = pd.qcut(tb, 4, labels=False, duplicates="drop")
+    lo = rb[q == 0]; hi = rb[q == q.max()]
+    f = lambda a: (a.mean(), a.std() / np.sqrt(len(a)))
+    (l, ls), (h, hs) = f(lo), f(hi)
+    o2.append(f"| {y} | {Tm[y].mean():.1%} | {m0.mean():.1%} | **{att*100:+.2f}** (±{1.96*se*100:.2f}) | {l*100:+.2f} (±{1.96*ls*100:.2f}) | "
+              f"{h*100:+.2f} (±{1.96*hs*100:.2f}) | {(h-l)*100:+.2f} (±{1.96*np.hypot(ls,hs)*100:.2f}) |")
+    for g, msk in groups.items():
+        a = r[msk]
+        sub[g].append(f"{a.mean()*100:+.1f} (±{1.96*a.std()/np.sqrt(max(len(a),1))*100:.1f})" if len(a) > 200 else "–")
+    full = reg.predict(Tm[X])
+    c = {x: np.corrcoef(Tm[x].values, full)[0, 1] for x in X if Tm[x].std() > 0}
+    drv2.append(f"- **{y}**: " + ", ".join(f"{k} ({v:+.2f})" for k, v in sorted(c.items(), key=lambda kv: -abs(kv[1]))[:4]))
+    print("v2", y, flush=True)
+o2 += ["", "## Extra risk by group (percentage points)", "", "| Group | n | " + " | ".join(Y) + " |", "|---|---|" + "---|" * len(Y)]
+for g, msk in groups.items():
+    o2.append(f"| {g} | {int(msk.sum()):,} | " + " | ".join(sub[g]) + " |")
+o2 += ["", "## What drives it (correlation with predicted extra risk)", ""] + drv2
+open("results/natality/NATALITY.md", "a").write("\n".join(o2) + "\n")
+print("\n".join(o2))

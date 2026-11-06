@@ -3,10 +3,13 @@ on:
   push:
     paths: ["pilots/natality/**", "pilots/sperm/hormones.py", "pilots/sperm/fetch_visem.py", "pilots/fingerprint/commands_only.py", ".github/workflows/medical2.yml"]
   workflow_dispatch:
+    inputs:
+      jobs: {description: "all|fp|sperm|natality", default: "all"}
 permissions:
   contents: write
 jobs:
   fingerprint-commands:
+    if: github.event_name == 'push' || inputs.jobs == 'all' || inputs.jobs == 'fp'
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -19,6 +22,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with: {name: fp, path: results/fingerprint/COMMANDS_ONLY.md}
   sperm-hormones:
+    if: github.event_name == 'push' || inputs.jobs == 'all' || inputs.jobs == 'sperm'
     runs-on: ubuntu-latest
     timeout-minutes: 300
     steps:
@@ -34,6 +38,7 @@ jobs:
         if: always()
         with: {name: hormones, path: "results/sperm/HORMONES.md\nresults/sperm/video_features.csv"}
   natality:
+    if: github.event_name == 'push' || inputs.jobs == 'all' || inputs.jobs == 'natality'
     runs-on: ubuntu-latest
     timeout-minutes: 300
     steps:
@@ -51,7 +56,8 @@ jobs:
             [ -s n.zip ] && break
           done
           unzip -o -q n.zip && rm n.zip && ls -la
-      - run: python pilots/natality/natality.py "$(ls -S /tmp/nat/* | head -1)"
+      - env: {N_CTRL: "800000"}
+        run: python pilots/natality/natality.py "$(ls -S /tmp/nat/* | head -1)"
       - uses: actions/upload-artifact@v4
         with: {name: natality, path: results/natality}
   commit:
