@@ -37,7 +37,7 @@ def main(limit):
         for run in RUNS:
             model = run.split("_", 2)[2]
             keys = []
-            for page in s3.get_paginator("list_objects_v2").paginate(Bucket=B, Prefix=f"verified/{run}/trajs/"):
+            for page in s3.get_paginator("list_objects_v2").paginate(Bucket=B, Prefix=f"bash-only/{run}/trajs/"):
                 keys += [o["Key"] for o in page.get("Contents", []) if o["Key"].endswith((".json", ".traj"))]
             keys = sorted(keys)[:limit]
             got = 0
