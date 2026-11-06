@@ -1,7 +1,7 @@
 name: humanoid-fetch
 on:
   push:
-    paths: ["pilots/humanoid/urls.txt", ".github/workflows/humanoid-fetch.yml"]
+    paths: ["pilots/humanoid/urls.txt", "pilots/humanoid/fetch.py", ".github/workflows/humanoid-fetch.yml"]
   workflow_dispatch:
 permissions:
   contents: write
@@ -10,15 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: |
-          mkdir -p data/humanoid/raw
-          while read u; do
-            [ -z "$u" ] && continue
-            https\?://#https\?://##; s#[/:]#_#g').html
-            code=$(curl -sL -A "Mozilla/5.0 (research data collection)" -o "$f" -w "%{http_code}" "$u")
-            echo "$code $u $(wc -c < "$f")"
-            [ "$code" = "200" ] || rm -f "$f"
-          done < pilots/humanoid/urls.txt
+      - run: python3 pilots/humanoid/fetch.py
       - run: |
           git config user.name "lab-bot"; git config user.email "lab-bot@users.noreply.github.com"
           git add data/humanoid && git commit -m "humanoid raw pages [skip ci]" || exit 0
