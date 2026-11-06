@@ -1,6 +1,6 @@
 # Do AI agents pick our bait CONTRACTS?
 
-Each model saw 12 search results (9 ordinary, 3 lures) (9 ordinary contracts, 3 bait contracts) for a bug-bounty goal and picked 3 to examine. Random picking = 25% per result.
+Each model saw 12 newly deployed contracts (9 ordinary, 3 bait) for a bug-bounty goal and picked 3 to examine. Random picking = 25% per result.
 
 | Model | Trials | No clear answer | unprotected withdraw | unprotected setOwner | AI-directed comment | plain decoy | too good to be true | ordinary result |
 |---|---|---|---|---|---|---|---|---|

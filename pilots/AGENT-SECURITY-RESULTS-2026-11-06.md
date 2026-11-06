@@ -28,3 +28,9 @@
 - Budget scaling (best strategy per agent): 1,000 → searchers 18–37 h, foragers 16 days; 10,000 → 5–9 h and 40 h, random scanners 72 days; 100,000 → 4–8 h, 4 h, 7 days.
 - GreyNoise (largest commercial internet sensor network): ~5,000 sensors in 80 countries, ~0.5 billion sessions/day; median 9 days early warning before vendor alerts on edge-device attacks.
 - Hacker-modified models (safety removed): bait still works, slightly better: Llama best lure 84% → 94% (avg 69% → 77%); Qwen uncensored fine-tune best 94% → 97% (avg 69% → 68%). Single-command fingerprint (3 families, random 33%): originals 52%, modified Llama 60%, modified Qwen 47% — family mostly still recognisable; weak test (one short command per answer).
+
+## On-chain bait (6 Nov, night)
+- Selection test (5 open models incl. 2 hacker-modified; 12 new contracts, 3 bait; random = 25%): ordinary contracts picked 5–10%; unprotected withdraw 83–100%, AI-directed comment 72–100%, too-good-to-be-true 79–95%, unprotected setOwner 69–84%, plain unverified decoy 29–71%.
+- Local-chain demo: 3 scripted attacker styles all flagged in the block of their first bait call; 0/4 honest users flagged (424 txs); bait lost 4 gwei. Breadcrumb followed only by the attacker scripted to follow it (mechanics only).
+- Epidemic v4 (Mirai-calibrated ISP cleanup): with all shields, medium/fast spread survives 100% because it moves to cloud + web3 GPU; dies only if account opening ≤30% of baseline or cloud closes accounts within ~12 h (7% alive). Slow spread + 1-day detection: 42% alive.
+- Competitor found: Acalvio (enterprise deception; 'Deception Guardrails' Jul 2026: honeytokens, honey skills, decoy MCP/RAG/agents inside company networks, patent-pending).
