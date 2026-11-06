@@ -14,7 +14,7 @@ jobs:
           mkdir -p data/humanoid/raw
           while read u; do
             [ -z "$u" ] && continue
-            f=data/humanoid/raw/$(echo "$u" | sed 's#https\?://##; s#[/:]#_#g').html
+            https\?://#https\?://##; s#[/:]#_#g').html
             code=$(curl -sL -A "Mozilla/5.0 (research data collection)" -o "$f" -w "%{http_code}" "$u")
             echo "$code $u $(wc -c < "$f")"
             [ "$code" = "200" ] || rm -f "$f"
