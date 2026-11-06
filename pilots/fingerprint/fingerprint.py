@@ -67,6 +67,7 @@ def main(path, out):
         acts = actions(d["messages"])
         if len(acts) >= 4 and model and sum(x == "none" for x, _ in acts) <= len(acts) / 2:
             runs.append((model, inst, acts))
+    print("runs kept:", len(runs), flush=True)
     cnt = Counter(m for m, _, _ in runs)
     keep = {m for m, c in cnt.items() if c >= 60}
     runs = [r for r in runs if r[0] in keep]

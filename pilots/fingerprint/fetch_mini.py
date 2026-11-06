@@ -27,7 +27,28 @@ def get(key):
     except Exception as e:
         return None
     msgs = d.get("messages") or d.get("history") or d.get("trajectory") or []
-    return [[m.get("role", ""), text(m.get("content"))] for m in msgs if isinstance(m, dict)]
+    if not getattr(get, "shown", False):
+        get.shown = True
+        print("TRAJ KEYS", list(d)[:20], "| MSG KEYS", [sorted(m) for m in msgs[:4] if isinstance(m, dict)], flush=True)
+        print("SAMPLE", json.dumps(msgs[2] if len(msgs) > 2 else msgs)[:1500], flush=True)
+    out = []
+    for m in msgs:
+        if not isinstance(m, dict):
+            continue
+        t = text(m.get("content"))
+        for tc in m.get("tool_calls") or []:
+            fn = (tc.get("function") or {}) if isinstance(tc, dict) else {}
+            args = fn.get("arguments", "")
+            try:
+                a = json.loads(args) if isinstance(args, str) else (args or {})
+                cmd = a.get("command") or a.get("cmd") or json.dumps(a)
+            except Exception:
+                cmd = str(args)
+            t += f"\n```bash\n{cmd}\n```"
+        if not t.strip() and m.get("extra"):
+            t = json.dumps(m.get("extra"))[:2000]
+        out.append([m.get("role", ""), t])
+    return out
 
 
 def main(limit):

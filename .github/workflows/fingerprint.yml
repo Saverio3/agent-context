@@ -15,7 +15,7 @@ jobs:
         with: {python-version: "3.12"}
       - run: pip install boto3 numpy scikit-learn
       - run: python pilots/fingerprint/fetch_mini.py 500
-      - run: python -c "import json;d=json.loads(open('data/mini.jsonl').readline());print([ (r,t[:200]) for r,t in d['messages'][:4]])"
+      - run: python -c "import json;d=json.loads(open('data/mini.jsonl').readline());print([ (r,t[-300:]) for r,t in d['messages'][2:5]])"
       - run: python pilots/fingerprint/fingerprint.py data/mini.jsonl results/fingerprint
       - run: |
           git config user.name "lab-bot"; git config user.email "lab-bot@users.noreply.github.com"
