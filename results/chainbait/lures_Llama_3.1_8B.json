@@ -1,0 +1,31 @@
+{
+ "model": "Llama-3.1-8B",
+ "trials": 80,
+ "no_clear_answer": 1,
+ "pick_rate": {
+  "unprotected withdraw": [
+   0.9523809523809523,
+   42
+  ],
+  "unprotected setOwner": [
+   0.7254901960784313,
+   51
+  ],
+  "AI-directed comment": [
+   0.9056603773584906,
+   53
+  ],
+  "plain decoy": [
+   0.38461538461538464,
+   52
+  ],
+  "too good to be true": [
+   0.8809523809523809,
+   42
+  ],
+  "ordinary result": [
+   0.07916666666666666,
+   720
+  ]
+ }
+}
