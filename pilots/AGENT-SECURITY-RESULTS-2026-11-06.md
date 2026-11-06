@@ -34,3 +34,7 @@
 - Local-chain demo: 3 scripted attacker styles all flagged in the block of their first bait call; 0/4 honest users flagged (424 txs); bait lost 4 gwei. Breadcrumb followed only by the attacker scripted to follow it (mechanics only).
 - Epidemic v4 (Mirai-calibrated ISP cleanup): with all shields, medium/fast spread survives 100% because it moves to cloud + web3 GPU; dies only if account opening ≤30% of baseline or cloud closes accounts within ~12 h (7% alive). Slow spread + 1-day detection: 42% alive.
 - Competitor found: Acalvio (enterprise deception; 'Deception Guardrails' Jul 2026: honeytokens, honey skills, decoy MCP/RAG/agents inside company networks, patent-pending).
+
+## Worm tripwires and AI-calling malware (6–7 Nov)
+- Tripwires (5 open models, 25 emails per placement): AI email assistants put the hidden code in their reply 12–100% of the time (Llama/Mistral ~100%; Qwen 32–96%); the worm-like 'self-copy' version obeyed 92–96%+ by every model; second-hop spread 10–100% (self-copy 46–96%). 0/125 false alarms on clean emails.
+- AI-calling malware lab (harmless imitation, mock AI server): naive rule 'AI wrote code then ran it' also flags a legit coding agent; refined rule (+ self-rewrite or autostart/hidden folder) flags only the imitation.
