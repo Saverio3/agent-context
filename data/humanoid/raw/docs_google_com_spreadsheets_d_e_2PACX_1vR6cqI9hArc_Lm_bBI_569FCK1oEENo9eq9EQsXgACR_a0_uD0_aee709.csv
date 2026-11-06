@@ -1,0 +1,15 @@
+After Seeding Round,,2 pts,1 pt,,,"Strength of
+Schedule",,,Goals,,,
+Seed,Team,Win,Draw,Loss,Pts,BHN,fBHN,Initial,For,Against,Diff,Opponents
+1,B-Human,6,,,12,41,247,1,39,1,38,"RoboEireann, HULKs, SPQR Team , Nao Devils , HTWK Robots , WisTex United "
+2,RoboEireann,3,2,1,8,45,231,2,14,7,7,"B-Human, HTWK Robots , Naova, WisTex United , SPQR Team , Nao Devils "
+3,SPQR Team ,3,1,2,7,42,224,6,11,13,-2,"WisTex United , Naova, B-Human, HULKs, RoboEireann, Dutch Nao Team "
+4,WisTex United ,3,1,2,7,41,225,5,17,10,7,"SPQR Team , rUNSWift , Berlin United , RoboEireann, HULKs, B-Human"
+5,HTWK Robots ,3,1,2,7,41,210,3,9,10,-1,"HULKs, RoboEireann, RedBackBots , Berlin United , B-Human, Naova"
+6,Berlin United ,3,1,2,7,26,210,8,6,6,0,"Nao Devils , Dutch Nao Team , WisTex United , HTWK Robots , rUNSWift , RedBackBots "
+7,HULKs,2,2,2,6,40,234,4,5,15,-10,"HTWK Robots , B-Human, Nao Devils , SPQR Team , WisTex United , rUNSWift "
+8,Nao Devils ,2,2,2,6,38,211,7,6,13,-7,"Berlin United , RedBackBots , HULKs, B-Human, Dutch Nao Team , RoboEireann"
+9,Naova,3,,3,6,28,218,10,11,9,2,"rUNSWift , SPQR Team , RoboEireann, Dutch Nao Team , RedBackBots , HTWK Robots "
+10,Dutch Nao Team ,1,1,4,3,29,195,12,1,11,-10,"RedBackBots , Berlin United , rUNSWift , Naova, Nao Devils , SPQR Team "
+11,RedBackBots ,,2,4,2,30,193,11,0,11,-11,"Dutch Nao Team , Nao Devils , HTWK Robots , rUNSWift , Naova, Berlin United "
+12,rUNSWift ,,1,5,1,31,194,9,0,13,-13,"Naova, WisTex United , Dutch Nao Team , RedBackBots , Berlin United , HULKs"
