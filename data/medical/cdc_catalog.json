@@ -1,0 +1,280 @@
+{
+ "wastewater SARS-CoV-2": [
+  [
+   "2ew6-ywp6",
+   "NWSS Public SARS-CoV-2 Wastewater Metric Data",
+   "2026-08-07T16:44:38.000Z"
+  ],
+  [
+   "g653-rqe2",
+   "NWSS Public SARS-CoV-2 Concentration in Wastewater Data",
+   "2026-08-07T16:43:51.000Z"
+  ],
+  [
+   "hhvg-83jq",
+   "Examination of SARS-CoV-2 serological test results from multiple commercial and laboratory platforms with an in-house serum panel",
+   "2023-12-13T17:49:20.000Z"
+  ],
+  [
+   "jr58-6ysp",
+   "SARS-CoV-2 Variant Proportions",
+   "2026-10-23T14:21:01.000Z"
+  ],
+  [
+   "atcp-73re",
+   "CDC Wastewater Viral Activity Level for SARS-CoV-2, Influenza A and RSV",
+   "2026-10-30T15:04:34.000Z"
+  ],
+  [
+   "j9g8-acpt",
+   "CDC Wastewater Data for SARS-CoV-2",
+   "2026-10-30T15:04:31.000Z"
+  ],
+  [
+   "ar8q-3jhn",
+   "2022\u20132023 Nationwide Blood Donor Seroprevalence Survey Combined Infection- and Vaccination-Induced Seroprevalence Estimates",
+   "2024-06-06T15:24:25.000Z"
+  ],
+  [
+   "rgnm-fkqb",
+   "Percent positivity of respiratory viruses by nucleic acid amplification tests (NAATs), as reported on the National Respiratory and Enteric Virus Surveillance System (NREVSS) Dashboard",
+   "2026-10-30T20:10:27.000Z"
+  ],
+  [
+   "wi5c-cscz",
+   "2020-2021 Nationwide Blood Donor Seroprevalence Survey Combined Infection- and Vaccination-Induced Seroprevalence Estimates",
+   "2022-02-18T14:51:55.000Z"
+  ],
+  [
+   "gvsb-yw6g",
+   "Percent Positivity of COVID-19 Nucleic Acid Amplification Tests by HHS Region, National Respiratory and Enteric Virus Surveillance System",
+   "2026-11-05T16:30:22.000Z"
+  ],
+  [
+   "8ve6-tiah",
+   "Persistence of SARS-CoV-2 on N95 filtering facepiece respirators: implications for reuse",
+   "2024-11-15T19:25:28.000Z"
+  ],
+  [
+   "mtc3-kq6r",
+   "2020-2021 Nationwide Blood Donor Seroprevalence Survey Infection-Induced Seroprevalence Estimates",
+   "2022-02-18T14:52:11.000Z"
+  ],
+  [
+   "ga52-qyaz",
+   "Efficacy of ventilation, HEPA air cleaners, universal masking, and physical distancing for reducing exposure to simulated exhaled aerosols in a meeting room-Dataset",
+   "2024-11-15T15:50:25.000Z"
+  ],
+  [
+   "3rge-nu2a",
+   "Rates of COVID-19 Cases or Deaths by Age Group and Vaccination Status",
+   "2023-02-22T19:50:33.000Z"
+  ],
+  [
+   "seuz-s2cv",
+   "Percent of Tests Positive for Viral Respiratory Pathogens",
+   "2026-10-30T16:03:24.000Z"
+  ]
+ ],
+ "NWSS": [
+  [
+   "2ew6-ywp6",
+   "NWSS Public SARS-CoV-2 Wastewater Metric Data",
+   "2026-08-07T16:44:38.000Z"
+  ],
+  [
+   "g653-rqe2",
+   "NWSS Public SARS-CoV-2 Concentration in Wastewater Data",
+   "2026-08-07T16:43:51.000Z"
+  ],
+  [
+   "atcp-73re",
+   "CDC Wastewater Viral Activity Level for SARS-CoV-2, Influenza A and RSV",
+   "2026-10-30T15:04:34.000Z"
+  ],
+  [
+   "j9g8-acpt",
+   "CDC Wastewater Data for SARS-CoV-2",
+   "2026-10-30T15:04:31.000Z"
+  ],
+  [
+   "akvg-8vrb",
+   "CDC Wastewater Data for Measles",
+   "2026-10-30T15:02:11.000Z"
+  ],
+  [
+   "ymmh-divb",
+   "CDC Wastewater Data for Influenza A",
+   "2026-10-30T15:07:19.000Z"
+  ],
+  [
+   "xpxn-rzgz",
+   "CDC Wastewater Data for Mpox",
+   "2026-10-30T15:04:30.000Z"
+  ],
+  [
+   "mtpu-urpp",
+   "CDC Wastewater Data for Avian Influenza A (H5)",
+   "2026-10-30T15:06:12.000Z"
+  ],
+  [
+   "45cq-cw4i",
+   "CDC Wastewater Data for RSV",
+   "2026-10-30T15:03:57.000Z"
+  ]
+ ],
+ "hospital admissions COVID weekly": [
+  [
+   "aemt-mg7g",
+   "Weekly United States Hospitalization Metrics by Jurisdiction, During Mandatory Reporting Period from August 1, 2020 to April 30, 2024, and for Data Reported Voluntarily Beginning May 1, 2024, National Healthcare Safety Network (NHSN) - ARCHIVED",
+   "2024-11-01T17:49:48.000Z"
+  ],
+  [
+   "ua7e-t2fy",
+   "Weekly Hospital Respiratory Data (HRD) Metrics by Jurisdiction, National Healthcare Safety Network (NHSN)",
+   "2026-10-30T13:49:20.000Z"
+  ],
+  [
+   "7dk4-g6vg",
+   "Weekly United States COVID-19 Hospitalization Metrics by Jurisdiction \u2013 ARCHIVED",
+   "2025-01-17T17:01:44.000Z"
+  ],
+  [
+   "mpgq-jmmr",
+   "Weekly Hospital Respiratory Data (HRD) Metrics by Jurisdiction, National Healthcare Safety Network (NHSN) (Preliminary)",
+   "2026-11-04T16:40:57.000Z"
+  ],
+  [
+   "akn2-qxic",
+   "Weekly United States COVID-19 Hospitalization Metrics by County \u2013 ARCHIVED",
+   "2025-01-17T17:03:49.000Z"
+  ],
+  [
+   "39z2-9zu6",
+   "United States COVID-19 Hospitalization Metrics by Jurisdiction, Timeseries \u2013 ARCHIVED",
+   "2025-01-17T17:02:10.000Z"
+  ],
+  [
+   "9t9r-e5a3",
+   "Respiratory Virus Response (RVR) United States Hospitalization Metrics by Jurisdiction, Timeseries \u2013 ARCHIVED",
+   "2024-10-18T16:09:34.000Z"
+  ],
+  [
+   "82ci-krud",
+   "Weekly United States COVID-19 Hospitalization Metrics by County (Historical) \u2013 ARCHIVED",
+   "2025-01-17T17:02:51.000Z"
+  ],
+  [
+   "rhwp-grxi",
+   "Weekly Hospital Respiratory Data (HRD) Metrics by Jurisdiction, National Healthcare Safety Network (NHSN) (Historical)",
+   "2026-10-30T13:51:17.000Z"
+  ],
+  [
+   "ype6-idgy",
+   "Weekly United States Hospitalization Metrics by Jurisdiction, During Mandatory Reporting Period from August 1, 2020 to April 30, 2024, and for Data Reported Voluntarily Beginning May 1, 2024, National Healthcare Safety Network (NHSN) (Historical)-ARCHIVED",
+   "2024-11-01T17:51:05.000Z"
+  ],
+  [
+   "b58h-s9zx",
+   "Provider Relief Fund COVID-19 High-Impact Payments",
+   "2020-11-16T14:32:15.000Z"
+  ],
+  [
+   "vdzy-6i9v",
+   "Weekly Hospital Respiratory Admission Levels and Rates by Jurisdiction, National Healthcare Safety Network (NHSN)",
+   "2026-10-30T13:53:11.000Z"
+  ],
+  [
+   "dt66-w6m6",
+   "Weekly COVID-19 County Level of Community Transmission as Originally Posted - ARCHIVED",
+   "2024-05-08T14:01:48.000Z"
+  ],
+  [
+   "ahrf-yqdt",
+   "Preliminary U.S. COVID-19 Burden Estimates",
+   "2026-10-23T15:51:36.000Z"
+  ],
+  [
+   "3nnm-4jni",
+   "United States COVID-19 Community Levels by County",
+   "2023-11-02T21:49:22.000Z"
+  ]
+ ],
+ "respiratory hospital": [
+  [
+   "kvib-3txy",
+   "RESP-NET Rates and Clinical Data",
+   "2026-10-30T13:40:15.000Z"
+  ],
+  [
+   "29hc-w46k",
+   "RSV-NET Rates and Clinical Data",
+   "2026-11-05T18:43:16.000Z"
+  ],
+  [
+   "aemt-mg7g",
+   "Weekly United States Hospitalization Metrics by Jurisdiction, During Mandatory Reporting Period from August 1, 2020 to April 30, 2024, and for Data Reported Voluntarily Beginning May 1, 2024, National Healthcare Safety Network (NHSN) - ARCHIVED",
+   "2024-11-01T17:49:48.000Z"
+  ],
+  [
+   "ahrf-yqdt",
+   "Preliminary U.S. COVID-19 Burden Estimates",
+   "2026-10-23T15:51:36.000Z"
+  ],
+  [
+   "vdzy-6i9v",
+   "Weekly Hospital Respiratory Admission Levels and Rates by Jurisdiction, National Healthcare Safety Network (NHSN)",
+   "2026-10-30T13:53:11.000Z"
+  ],
+  [
+   "ua7e-t2fy",
+   "Weekly Hospital Respiratory Data (HRD) Metrics by Jurisdiction, National Healthcare Safety Network (NHSN)",
+   "2026-10-30T13:49:20.000Z"
+  ],
+  [
+   "6jg4-xsqq",
+   "COVID-NET Rates and Clinical Data",
+   "2026-11-05T18:44:57.000Z"
+  ],
+  [
+   "mpgq-jmmr",
+   "Weekly Hospital Respiratory Data (HRD) Metrics by Jurisdiction, National Healthcare Safety Network (NHSN) (Preliminary)",
+   "2026-11-04T16:40:57.000Z"
+  ],
+  [
+   "sumd-iwm8",
+   "Preliminary U.S. RSV Burden Estimates",
+   "2026-07-10T17:01:58.000Z"
+  ],
+  [
+   "whhs-7a5d",
+   "Imputed Hospitalization Rate for RSV at the State Level",
+   "2026-05-13T16:18:13.000Z"
+  ],
+  [
+   "xnjn-rdmd",
+   "Preliminary Estimates of Cumulative COVID-19 Hospitalizations by Week",
+   "2026-10-23T15:51:38.000Z"
+  ],
+  [
+   "hmye-mqgq",
+   "Preliminary Estimates of Cumulative RSV Hospitalizations by Week",
+   "2026-07-10T17:02:00.000Z"
+  ],
+  [
+   "ch5i-63ve",
+   "RESP-LENS",
+   "2024-12-23T16:00:27.000Z"
+  ],
+  [
+   "ype6-idgy",
+   "Weekly United States Hospitalization Metrics by Jurisdiction, During Mandatory Reporting Period from August 1, 2020 to April 30, 2024, and for Data Reported Voluntarily Beginning May 1, 2024, National Healthcare Safety Network (NHSN) (Historical)-ARCHIVED",
+   "2024-11-01T17:51:05.000Z"
+  ],
+  [
+   "q3t8-zr7t",
+   "COVID-19 Hospital Data from the National Hospital Care Survey",
+   "2024-07-29T20:35:37.000Z"
+  ]
+ ]
+}
