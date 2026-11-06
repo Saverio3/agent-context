@@ -1,42 +1,57 @@
-| Group | Name | .com | .ai | .io |
-|---|---|---|---|---|
-| greek | dolos | taken | ?403 | free |
-| greek | kyrtos | taken | ?403 | free |
-| greek | diktyon | taken | ?403 | free |
-| greek | phryktos | taken | ?403 | free |
-| greek | ichnos | taken | ?403 | free |
-| greek | pagida | taken | ?403 | free |
-| greek | skopia | taken | ?403 | free |
-| greek | ixeus | taken | ?403 | free |
-| greek | apatelabs | free | ?403 | free |
-| greek | myrmex | taken | ?403 | free |
-| japanese | noroshi | taken | ?403 | free |
-| japanese | wana | taken | ?403 | free |
-| japanese | shiori | taken | ?403 | free |
-| japanese | kagero | taken | ?403 | free |
-| japanese | monomi | taken | ?403 | free |
-| japanese | yamori | taken | ?403 | free |
-| japanese | kakashi | taken | ?403 | free |
-| japanese | torimochi | free | ?403 | free |
-| japanese | ukai | taken | ?403 | free |
-| japanese | ikesu | taken | ?403 | free |
-| seo | agentlure | taken | ?403 | free |
-| seo | agentsnare | taken | ?403 | free |
-| seo | agenttripwire | taken | ?403 | free |
-| seo | rogueagentwatch | taken | ?403 | free |
-| seo | agenthoneypot | taken | ?403 | free |
-| seo | aiagenttrap | taken | ?403 | free |
-| seo | agentcanary | taken | ?403 | free |
-| seo | modeltrace | taken | ?403 | free |
-| seo | chainbait | taken | ?403 | free |
-| seo | honeyagents | taken | ?403 | free |
-| best | esca | taken | ?403 | free |
-| best | drosera | taken | ?403 | free |
-| best | lurewise | taken | ?403 | free |
-| best | snaregrid | free | ?403 | free |
-| best | tripline | taken | ?403 | free |
-| best | mothlamp | taken | ?403 | free |
-| best | baitwell | taken | ?403 | free |
-| best | lurecraft | taken | ?403 | free |
-| best | canarygrid | taken | ?403 | free |
-| best | lurefield | taken | ?403 | free |
+| Group | Name | .com |
+|---|---|---|
+| greek | phryktia | free |
+| greek | ixeutica | free |
+| greek | pagidex | free |
+| greek | dolostra | free |
+| greek | kyrtora | free |
+| greek | ichnora | taken |
+| greek | diktyra | taken |
+| greek | apatelabs | free |
+| greek | myrmexa | free |
+| greek | skopeion | free |
+| greek | dolosgrid | free |
+| greek | kyrtoslabs | free |
+| greek | phryktor | taken |
+| greek | agreus | taken |
+| greek | ixeuslabs | free |
+| japanese | torimochi | free |
+| japanese | noroshinet | free |
+| japanese | wanaworks | free |
+| japanese | shiorigrid | free |
+| japanese | ikesulabs | free |
+| japanese | yamorisec | free |
+| japanese | kakashinet | free |
+| japanese | monomiwatch | free |
+| japanese | kagerolabs | free |
+| japanese | ukailabs | taken |
+| japanese | wanagrid | free |
+| japanese | norosha | free |
+| japanese | ikesugrid | free |
+| japanese | amikago | free |
+| seo | catchrogueai | free |
+| seo | rogueaitrap | free |
+| seo | aiagentlures | free |
+| seo | agentbaitlab | free |
+| seo | agenttrapnet | free |
+| seo | luresforai | free |
+| seo | rogueagentradar | free |
+| seo | aiagentdecoys | free |
+| seo | aiwormwatch | free |
+| seo | agenttripwires | free |
+| seo | rogueaishield | taken |
+| seo | aiagenthoneytrap | free |
+| best | snaregrid | free |
+| best | lurelattice | free |
+| best | baitbeacon | taken |
+| best | trapwright | taken |
+| best | lurehold | free |
+| best | snarewright | free |
+| best | baitgrid | taken |
+| best | lurekeep | free |
+| best | cagewell | taken |
+| best | mothgrid | free |
+| best | escalure | taken |
+| best | lurespire | free |
+| best | snarefield | free |
+| best | baitlantern | free |
