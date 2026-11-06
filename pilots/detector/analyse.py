@@ -16,8 +16,15 @@ def evaluate(path, title):
     det, fa = [], []
     for lab in sorted(set(labels), key=lambda l: (-int(next(r['kind'] for r in rows if r['label'] == l)), l)):
         te = np.array([l == lab for l in labels])
-        clf = GradientBoostingClassifier(n_estimators=200, max_depth=3, random_state=0).fit(X[~te], y[~te])
-        p = clf.predict(X[te]).mean()
+        if len(set(y[~te])) < 2:  # the only AI workload: hold out one repetition at a time instead
+            reps = np.array([r["rep"] for r in rows]); ps = []
+            for rp in sorted(set(reps[te])):
+                t2 = te & (reps == rp)
+                ps.append(GradientBoostingClassifier(n_estimators=200, max_depth=3, random_state=0).fit(X[~t2], y[~t2]).predict(X[t2]))
+            p = np.concatenate(ps).mean(); lab = lab + " (only AI type: unseen repetition, not unseen workload)"
+        else:
+            clf = GradientBoostingClassifier(n_estimators=200, max_depth=3, random_state=0).fit(X[~te], y[~te])
+            p = clf.predict(X[te]).mean()
         is_ai = int(y[te][0])
         (det if is_ai else fa).append(p)
         out.append(f"| {lab} | {'yes' if is_ai else 'no'} | {te.sum()} | {p:.0%} |")
