@@ -10,6 +10,8 @@ def evaluate(path, title):
     feats = [k for k in rows[0] if k not in ("kind", "label", "rep")]
     X = np.array([[float(r[k]) for k in feats] for r in rows]); y = np.array([int(r["kind"]) for r in rows])
     labels = [r["label"] for r in rows]
+    if len(set(y)) < 2:
+        return [f"### {title}", "", "Not tested: no AI windows were captured in this run.", ""]
     out = [f"### {title}", "", "| Workload (never seen in training) | AI? | Windows | Flagged as AI |", "|---|---|---|---|"]
     det, fa = [], []
     for lab in sorted(set(labels), key=lambda l: (-int(next(r['kind'] for r in rows if r['label'] == l)), l)):
