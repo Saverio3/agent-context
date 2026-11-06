@@ -9,7 +9,7 @@ Time to 5 sightings (as in the decoy maths) = 5 / (S*f*p). Compared with random-
 import glob
 import json
 
-rows = [json.load(open(f)) for f in sorted(glob.glob("results/lures/*.json"))]
+rows = [json.load(open(f)) for f in sorted(glob.glob("results/lures/*.json")) if "recon_" not in f]
 kinds = ["high-value bait", "leaked secret", "AI-directed note", "plain decoy", "too good to be true", "ordinary result"]
 out = ["# Do AI agents take AI-targeted bait?", "",
        "Each model saw 12 search results (9 ordinary, 3 lures) for a security-testing goal and picked 3 to investigate. "

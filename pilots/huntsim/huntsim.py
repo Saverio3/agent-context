@@ -33,7 +33,7 @@ rng = np.random.default_rng(5)
 
 # lure pick rates: average lure vs best lure for a given model (from the lure pilot if available)
 p_avg, p_best, p_ord = 0.40, 0.60, 0.25
-files = glob.glob("results/lures/*.json")
+files = [f for f in glob.glob("results/lures/*.json") if "recon_" not in f]
 if files:
     av, be, od = [], [], []
     for f in files:
