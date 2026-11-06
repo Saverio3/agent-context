@@ -17,11 +17,15 @@ jobs:
           $B/llama-server --help 2>&1 | grep -i -A2 rpc || true
       - run: |
           B=llama.cpp/build/bin
-          (stdbuf -oL -eL $B/ggml-rpc-server -p 50052 -t 1 > a.log 2>&1 &)
-          (stdbuf -oL -eL $B/ggml-rpc-server -p 50053 -t 1 > b.log 2>&1 &)
-          sleep 5; ss -ltnp | grep 5005 || echo "rpc not listening"; cat a.log
-          (sudo timeout 60 tcpdump -l -i lo -nn -q 'tcp port 50052 or tcp port 50053' 2>/dev/null | wc -l > pk.txt &)
-          timeout 200 $B/llama-server -m model.gguf --port 8091 -t 1 -c 2048 -ngl 99 --rpc 127.0.0.1:50052,127.0.0.1:50053 > s.log 2>&1 &
-          for i in $(seq 1 60); do curl -s localhost:8091/health && break; sleep 3; done; echo
-          curl -s localhost:8091/completion -d '{"prompt":"Hello","n_predict":20}' | head -c 300; echo
-          sleep 30; echo "packets:"; cat pk.txt; echo "--- server log"; tail -40 s.log; echo "--- rpc log"; tail -20 a.log
+          ($B/ggml-rpc-server -p 50052 -t 1 > a.log 2>&1 &)
+          ($B/ggml-rpc-server -p 50053 -t 1 > b.log 2>&1 &)
+          sleep 4
+          $B/llama-server --rpc 127.0.0.1:50052,127.0.0.1:50053 --list-devices 2>&1 | tail -8
+          DEVS=$($B/llama-server --rpc 127.0.0.1:50052,127.0.0.1:50053 --list-devices 2>&1 | grep -oE '^ *RPC[^:]*' | tr -d ' ' | paste -sd, -)
+          echo "DEVS=$DEVS"
+          sudo timeout 90 tcpdump -l -i lo -nn -q 'tcp port 50052 or tcp port 50053' 2>/dev/null > pk.txt &
+          timeout 120 $B/llama-server -m model.gguf --port 8091 -t 1 -c 2048 -ngl 99 --rpc 127.0.0.1:50052,127.0.0.1:50053 --device $DEVS > s.log 2>&1 &
+          for i in $(seq 1 60); do curl -s localhost:8091/health && break; sleep 2; done; echo
+          for k in 1 2 3; do curl -s localhost:8091/completion -d '{"prompt":"Hello","n_predict":30}' | head -c 120; echo; done
+          sleep 5; echo "packets: $(wc -l < pk.txt)"; head -3 pk.txt
+          grep -iE "rpc|offload|device|buffer" s.log | head -20
