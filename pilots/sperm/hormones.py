@@ -63,13 +63,25 @@ for v in sorted([p for p in glob.glob(f"{ROOT}/**/*", recursive=True) if p.lower
     m = re.search(r"(\d+)", os.path.basename(v))
     f = video_features(v)
     if f and m:
-        f["ID"] = int(m.group(1)); rows.append(f)
+        f["ID"] = int(m.group(1)); f["file"] = os.path.basename(v); rows.append(f)
         print(os.path.basename(v), "ok", flush=True)
-F = pd.DataFrame(rows).groupby("ID").mean().reset_index()  # some men have >1 video
+F = pd.DataFrame(rows)
+vm = [x for x in glob.glob(f"{ROOT}/**/*videos*.csv", recursive=True)]
+if vm:  # official video -> participant mapping, if present
+    t = pd.read_csv(vm[0], sep=None, engine="python"); print(t.head())
+    fc = next((c for c in t.columns if t[c].astype(str).str.contains(r"\.avi|\.mp4", case=False).any()), None)
+    if fc is not None:
+        mp = {os.path.splitext(os.path.basename(str(a)))[0]: b for a, b in zip(t[fc], t[t.columns[0]])}
+        F["ID"] = [int(mp.get(os.path.splitext(x)[0], i)) for x, i in zip(F.file, F.ID)]
+F = F.drop(columns="file")
+os.makedirs("results/sperm", exist_ok=True)
+F.to_csv("results/sperm/video_features_raw.csv", index=False)  # save before anything can fail
+F = F.groupby("ID").mean().reset_index()
 
 
 def load(name):
-    p = glob.glob(f"{ROOT}/**/{name}*.csv", recursive=True)
+    p = [x for x in glob.glob(f"{ROOT}/**/*{name}*.csv", recursive=True) if "Train" not in os.path.basename(x)] or \
+        glob.glob(f"{ROOT}/**/*{name}*.csv", recursive=True)
     if not p:
         return None
     d = pd.read_csv(p[0], sep=None, engine="python")

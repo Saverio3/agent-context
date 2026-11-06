@@ -31,12 +31,18 @@ jobs:
         run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL; df -h / | tail -1
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
-      - run: pip install -q huggingface_hub opencv-python-headless numpy pandas scipy scikit-learn
+      - run: pip install -q huggingface_hub remotezip opencv-python-headless numpy pandas scipy scikit-learn
+      - run: python pilots/sperm/fetch_visem_csv.py /tmp/visem && find /tmp/visem -iname "*hormone*" | grep -q .
       - run: python pilots/sperm/fetch_visem.py /tmp/visem && df -h / | tail -1 && find /tmp/visem -maxdepth 3 | head -40
       - run: python pilots/sperm/hormones.py /tmp/visem
       - uses: actions/upload-artifact@v4
         if: always()
-        with: {name: hormones, path: "results/sperm/HORMONES.md\nresults/sperm/video_features.csv"}
+        with:
+          name: hormones
+          path: |
+            results/sperm/HORMONES.md
+            results/sperm/video_features.csv
+            results/sperm/video_features_raw.csv
   natality:
     if: github.event_name == 'push' || inputs.jobs == 'all' || inputs.jobs == 'natality'
     runs-on: ubuntu-latest
