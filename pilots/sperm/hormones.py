@@ -70,7 +70,7 @@ F = pd.read_csv(PRE) if PRE else pd.DataFrame(rows)
 if "file" not in F: F["file"] = F.ID.astype(str) + ".avi"
 vm = [x for x in glob.glob(f"{ROOT}/**/*videos*.csv", recursive=True)]
 if vm:  # official video -> participant mapping, if present
-    t = pd.read_csv(vm[0], sep=None, engine="python"); print(t.head())
+    t = pd.read_csv(vm[0], sep=";" if ";" in open(vm[0], encoding="utf-8-sig").readline() else ",", encoding="utf-8-sig"); print(t.head())
     fc = next((c for c in t.columns if t[c].astype(str).str.contains(r"\.avi|\.mp4", case=False).any()), None)
     if fc is not None:
         mp = {os.path.splitext(os.path.basename(str(a)))[0]: b for a, b in zip(t[fc], t[t.columns[0]])}
@@ -86,7 +86,8 @@ def load(name):
         glob.glob(f"{ROOT}/**/*{name}*.csv", recursive=True)
     if not p:
         return None
-    d = pd.read_csv(p[0], sep=None, engine="python")
+    head = open(p[0], encoding="utf-8-sig").readline()
+    d = pd.read_csv(p[0], sep=";" if head.count(";") > head.count(",") else ",", encoding="utf-8-sig")
     d.columns = [c.strip() for c in d.columns]
     print(name, p[0], d.shape, list(d.columns)[:6]); print(d.head(3))
     d = d.rename(columns={d.columns[0]: "ID"})
