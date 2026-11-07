@@ -1,11 +1,11 @@
 {
  "tag": "Gemini-2.5-Flash",
  "provider": "gemini",
- "model": "gemini-2.5-flash",
- "in": 0,
- "out": 0,
+ "model": "gemini-flash-latest",
+ "in": 24655,
+ "out": 669,
  "usd": 0.0,
- "calls": 0,
+ "calls": 180,
  "blocked": 0,
  "cap": 0.0
 }

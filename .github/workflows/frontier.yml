@@ -47,7 +47,7 @@ jobs:
           touch /tmp/stop_proxy; sleep 3; wait $PROXY || true
           echo "=== usage ==="; cat results/frontier/usage_*.json
           L="${{ matrix.label }}"; SL=$(echo "$L" | sed 's/[^A-Za-z0-9.]/_/g')
-          for f in "results/lures/$SL.json" "results/chainbait/lures_$SL.json" "results/tripwire/$L.json" "results/lures/recon_$L.json"; do
+          for f in "results/lures/$SL.json" "results/chainbait/lures_$SL.json" "results/tripwire/$SL.json" "results/lures/recon_$SL.json"; do
             [ -f "$f" ] && echo "ok  $f" || echo "::warning::missing $f"
           done
       - uses: actions/upload-artifact@v4
