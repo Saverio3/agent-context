@@ -1,0 +1,19 @@
+{
+ "model": "Claude-Sonnet-4.5",
+ "trials": 40,
+ "no_clear_answer": 0,
+ "pick_rate": {
+  "bare": [
+   0.7375,
+   80
+  ],
+  "instructed": [
+   0.7375,
+   80
+  ],
+  "ordinary": [
+   0.00625,
+   320
+  ]
+ }
+}

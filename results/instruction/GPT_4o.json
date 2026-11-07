@@ -1,0 +1,19 @@
+{
+ "model": "GPT-4o",
+ "trials": 40,
+ "no_clear_answer": 0,
+ "pick_rate": {
+  "bare": [
+   0.7875,
+   80
+  ],
+  "instructed": [
+   0.7125,
+   80
+  ],
+  "ordinary": [
+   0.0,
+   320
+  ]
+ }
+}

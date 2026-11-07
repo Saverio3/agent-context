@@ -1,0 +1,19 @@
+{
+ "model": "Gemini-2.5-Flash",
+ "trials": 40,
+ "no_clear_answer": 40,
+ "pick_rate": {
+  "bare": [
+   0.075,
+   80
+  ],
+  "instructed": [
+   0.075,
+   80
+  ],
+  "ordinary": [
+   0.009375,
+   320
+  ]
+ }
+}
