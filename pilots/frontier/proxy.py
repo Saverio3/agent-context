@@ -75,6 +75,26 @@ def call_gemini(messages, temperature, max_tokens):
 
 CALL = {"openai": call_openai, "anthropic": call_anthropic, "gemini": call_gemini}[PROVIDER]
 
+def resolve_gemini():
+    global MODEL
+    try:
+        r = urllib.request.urlopen(f"https://generativelanguage.googleapis.com/v1beta/models?key={os.environ['GEMINI_API_KEY']}&pageSize=200", timeout=30)
+        models = [m for m in json.load(r).get("models", []) if "generateContent" in m.get("supportedGenerationMethods", [])]
+        names = [m["name"].split("/")[-1] for m in models]
+        if MODEL in names:
+            return
+        pref = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-2.0-flash-001", "gemini-2.5-flash-lite"]
+        pick = next((p for p in pref if p in names), None) or next((n for n in names if "flash" in n and "thinking" not in n), None) or (names[0] if names else MODEL)
+        print(f"gemini: '{MODEL}' not available; using '{pick}'. available flash: {[n for n in names if 'flash' in n][:6]}", flush=True)
+        MODEL = pick
+    except Exception as e:
+        print("gemini model resolve failed:", e, flush=True)
+
+
+if PROVIDER == "gemini":
+    resolve_gemini()
+
+
 
 def chat(messages, temperature, max_tokens):
     with lock:
