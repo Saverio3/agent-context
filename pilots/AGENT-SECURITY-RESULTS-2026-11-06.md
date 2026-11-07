@@ -38,3 +38,9 @@
 ## Worm tripwires and AI-calling malware (6–7 Nov)
 - Tripwires (5 open models, 25 emails per placement): AI email assistants put the hidden code in their reply 12–100% of the time (Llama/Mistral ~100%; Qwen 32–96%); the worm-like 'self-copy' version obeyed 92–96%+ by every model; second-hop spread 10–100% (self-copy 46–96%). 0/125 false alarms on clean emails.
 - AI-calling malware lab (harmless imitation, mock AI server): naive rule 'AI wrote code then ran it' also flags a legit coding agent; refined rule (+ self-rewrite or autostart/hidden folder) flags only the imitation.
+
+## Frontier models (API) + instruction A/B (7 Nov)
+- Lures on frontier models: GPT-4o web best 100%/avg 91%, chain 100%/95%; Claude Sonnet 4.5 web 95%/85%, chain 100%/91%; Gemini 2.5 Flash resists (web 14%/6%, chain 30%/11%). Bait works on top models, Gemini the outlier.
+- Tripwire obey: GPT-4o 0%, Claude 50%, open models 92-100% — frontier safety training defeats injected-instruction tripwires.
+- A/B (bare attractive target vs same target + embedded instruction): GPT-4o bare 79% vs instructed 71% (instruction HURTS); Claude 74%/74%; Gemini refused all 40 trials. Design rule: lures = bare realistic targets, no embedded "agent: do X" text. Ordinary results picked 0-1% (low false positives).
+- Total API spend across all frontier runs ~ $1.4 of ~$8.
