@@ -1,0 +1,61 @@
+name: ab-lures
+on:
+  workflow_dispatch:
+    inputs:
+      models: {description: "all | or comma list", default: "all"}
+permissions:
+  contents: write
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {label: "GPT-4o",            provider: openai,    model: "gpt-4o",            budget: "0.60", keyenv: OPENAI_API_KEY}
+          - {label: "Claude-Sonnet-4.5", provider: anthropic, model: "claude-sonnet-4-5", budget: "0.60", keyenv: ANTHROPIC_API_KEY}
+          - {label: "Gemini-2.5-Flash",  provider: gemini,    model: "gemini-flash-latest", budget: "0.00", keyenv: GEMINI_API_KEY}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: check selection and key
+        run: |
+          SEL="${{ github.event.inputs.models }}"
+          if [ "$SEL" != "all" ] && ! echo "$SEL" | grep -q "${{ matrix.label }}"; then echo "SKIP=1" >> $GITHUB_ENV; fi
+          if [ -z "${{ env[matrix.keyenv] }}" ]; then echo "::warning::secret ${{ matrix.keyenv }} empty"; echo "SKIP=1" >> $GITHUB_ENV; fi
+      - name: run A/B lure test
+        if: env.SKIP != '1'
+        env: {PROVIDER: "${{ matrix.provider }}", MODEL: "${{ matrix.model }}", TAG: "${{ matrix.label }}", BUDGET_USD: "${{ matrix.budget }}"}
+        run: |
+          rm -f /tmp/stop_proxy
+          python pilots/frontier/proxy.py & PROXY=$!
+          for i in $(seq 1 30); do curl -s localhost:8080/health | grep -q ok && break; sleep 1; done
+          python pilots/lures/instruction_test.py "${{ matrix.label }}" 40 || true
+          touch /tmp/stop_proxy; sleep 3; wait $PROXY || true
+          cat results/frontier/usage_*.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: "ab-${{ matrix.label }}", path: results/instruction}
+  summary:
+    needs: [test]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - uses: actions/download-artifact@v4
+        with: {path: dl}
+      - run: |
+          mkdir -p results/instruction
+          for d in dl/ab-*; do cp -r "$d"/* results/instruction/ 2>/dev/null || true; done
+          python pilots/lures/instruction_summary.py || true
+          git config user.name "lab-bot"; git config user.email "lab-bot@users.noreply.github.com"
+          git add results && git commit -m "instruction A/B results [skip ci]" || exit 0
+          for i in 1 2 3; do git pull --rebase -q && git push && break; sleep 5; done
