@@ -67,7 +67,7 @@ jobs:
         with: {path: dl}
       - run: |
           mkdir -p results/lures results/chainbait results/tripwire results/frontier
-          for d in dl/frontier-*; do cp -rn "$d"/* results/ 2>/dev/null || true; done
+          for d in dl/frontier-*; do cp -r "$d"/* results/ 2>/dev/null || true; done
           # move nested frontier usage up if needed
           find dl -path '*frontier/usage_*.json' -exec cp {} results/frontier/ \; 2>/dev/null || true
           python pilots/frontier/summarise.py || true
