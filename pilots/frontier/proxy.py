@@ -21,7 +21,7 @@ PRICE = {
     "gpt-5": (1.25, 10.0), "gpt-5-mini": (0.25, 2.0), "o4-mini": (1.1, 4.4),
     "claude-sonnet-4-5": (3.0, 15.0), "claude-3-5-haiku-latest": (0.8, 4.0), "claude-haiku-4-5": (1.0, 5.0),
     "claude-3-5-sonnet-latest": (3.0, 15.0),
-    "gemini-2.5-flash": (0.0, 0.0), "gemini-2.5-pro": (0.0, 0.0), "gemini-1.5-flash": (0.0, 0.0),
+    "gemini-2.5-flash": (0.0, 0.0), "gemini-2.0-flash": (0.0, 0.0), "gemini-2.5-pro": (0.0, 0.0), "gemini-1.5-flash": (0.0, 0.0),
     "gemini-flash-latest": (0.0, 0.0),
 }
 pin, pout = PRICE.get(MODEL, (3.0, 15.0))

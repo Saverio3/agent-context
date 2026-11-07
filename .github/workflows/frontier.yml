@@ -14,7 +14,7 @@ jobs:
         include:
           - {label: "GPT-4o",            provider: openai,    model: "gpt-4o",            budget: "1.50", keyenv: OPENAI_API_KEY}
           - {label: "Claude-Sonnet-4.5", provider: anthropic, model: "claude-sonnet-4-5", budget: "1.20", keyenv: ANTHROPIC_API_KEY}
-          - {label: "Gemini-2.5-Flash",  provider: gemini,    model: "gemini-2.5-flash",  budget: "0.00", keyenv: GEMINI_API_KEY}
+          - {label: "Gemini-2.5-Flash",  provider: gemini,    model: "gemini-2.0-flash",    budget: "0.00", keyenv: GEMINI_API_KEY}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
