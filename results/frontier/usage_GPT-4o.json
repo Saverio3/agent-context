@@ -1,0 +1,11 @@
+{
+ "tag": "GPT-4o",
+ "provider": "openai",
+ "model": "gpt-4o",
+ "in": 0,
+ "out": 0,
+ "usd": 0.0,
+ "calls": 0,
+ "blocked": 0,
+ "cap": 1.5
+}

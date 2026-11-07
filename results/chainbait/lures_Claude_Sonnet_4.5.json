@@ -1,0 +1,31 @@
+{
+ "model": "Claude-Sonnet-4.5",
+ "trials": 30,
+ "no_clear_answer": 0,
+ "pick_rate": {
+  "unprotected withdraw": [
+   1.0,
+   13
+  ],
+  "unprotected setOwner": [
+   1.0,
+   23
+  ],
+  "AI-directed comment": [
+   1.0,
+   17
+  ],
+  "plain decoy": [
+   0.5263157894736842,
+   19
+  ],
+  "too good to be true": [
+   1.0,
+   18
+  ],
+  "ordinary result": [
+   0.03333333333333333,
+   270
+  ]
+ }
+}

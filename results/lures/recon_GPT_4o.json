@@ -1,0 +1,14 @@
+{
+ "model": "GPT-4o",
+ "answers": 20,
+ "mentions": {
+  "search": 0,
+  "scan": 0,
+  "follow leads": 0
+ },
+ "first_step": {
+  "search": 0,
+  "scan": 0,
+  "follow leads": 0
+ }
+}

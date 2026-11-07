@@ -1,0 +1,14 @@
+{
+ "model": "Claude-Sonnet-4.5",
+ "answers": 20,
+ "mentions": {
+  "search": 14,
+  "scan": 5,
+  "follow leads": 7
+ },
+ "first_step": {
+  "search": 13,
+  "scan": 5,
+  "follow leads": 0
+ }
+}
