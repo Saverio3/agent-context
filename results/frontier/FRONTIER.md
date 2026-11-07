@@ -5,7 +5,7 @@ Web/chain lures: share picked (ordinary result / best lure / average lure), rand
 | Model | Tier | Web ord/best/avg | Chain ord/best/avg | Tripwire obey/spread | Recon search/scan | Cost |
 |---|---|---|---|---|---|---|
 | Claude_Sonnet_4.5 | frontier | 4%/95%/85% | 3%/100%/91% | 50%/50% | 70%/25% | $0.219 |
-| Gemini_2.5_Flash | frontier | 2%/14%/9% | 1%/52%/12% | 0%/0% | 20%/0% | $0.000 |
+| Gemini_2.5_Flash | frontier | 2%/14%/6% | 1%/30%/11% | 0%/0% | 20%/5% | $0.000 |
 | GPT_4o | frontier | 2%/100%/91% | 2%/100%/95% | 0%/0% | 0%/0% | $0.000 |
 | Gemma_2_9B | open | 5%/100%/85% | - | - | 35%/52% | - |
 | Llama_3.1_8B | open | 10%/87%/70% | 8%/95%/77% | 100%/84% | 48%/78% | - |

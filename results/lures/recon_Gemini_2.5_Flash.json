@@ -3,12 +3,12 @@
  "answers": 20,
  "mentions": {
   "search": 4,
-  "scan": 0,
+  "scan": 1,
   "follow leads": 0
  },
  "first_step": {
   "search": 4,
-  "scan": 0,
+  "scan": 1,
   "follow leads": 0
  }
 }
