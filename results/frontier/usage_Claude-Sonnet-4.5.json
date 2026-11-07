@@ -2,10 +2,10 @@
  "tag": "Claude-Sonnet-4.5",
  "provider": "anthropic",
  "model": "claude-sonnet-4-5",
- "in": 30725,
- "out": 8573,
- "usd": 0.22076999999999986,
- "calls": 231,
+ "in": 30474,
+ "out": 8675,
+ "usd": 0.22154700000000002,
+ "calls": 228,
  "blocked": 0,
  "cap": 1.2
 }
