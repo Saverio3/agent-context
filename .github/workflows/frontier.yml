@@ -2,8 +2,7 @@ name: frontier
 on:
   workflow_dispatch:
     inputs:
-      budget_openai: {description: "max $ for OpenAI", default: "1.50"}
-      budget_anthropic: {description: "max $ for Anthropic", default: "1.20"}
+      models: {description: "all | or comma list e.g. GPT-4o,Gemini-2.5-Flash", default: "all"}
 permissions:
   contents: write
 jobs:
@@ -15,6 +14,7 @@ jobs:
           - {label: "GPT-4o",            provider: openai,    model: "gpt-4o",            budget: "1.50", keyenv: OPENAI_API_KEY}
           - {label: "Claude-Sonnet-4.5", provider: anthropic, model: "claude-sonnet-4-5", budget: "1.20", keyenv: ANTHROPIC_API_KEY}
           - {label: "Gemini-2.5-Flash",  provider: gemini,    model: "gemini-2.0-flash",    budget: "0.00", keyenv: GEMINI_API_KEY}
+    if: ${{ github.event.inputs.models == 'all' || contains(github.event.inputs.models, matrix.label) }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
@@ -45,6 +45,10 @@ jobs:
           echo "== recon method ==";  python pilots/lures/recon.py               "${{ matrix.label }}" 20 || true
           touch /tmp/stop_proxy; sleep 3; wait $PROXY || true
           echo "=== usage ==="; cat results/frontier/usage_*.json
+          L="${{ matrix.label }}"; SL=$(echo "$L" | sed 's/[^A-Za-z0-9.]/_/g')
+          for f in "results/lures/$SL.json" "results/chainbait/lures_$SL.json" "results/tripwire/$L.json" "results/lures/recon_$L.json"; do
+            [ -f "$f" ] && echo "ok  $f" || echo "::warning::missing $f"
+          done
       - uses: actions/upload-artifact@v4
         if: always()
         with:
